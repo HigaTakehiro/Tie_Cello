@@ -130,6 +130,7 @@
     <ClInclude Include="Scene\selectScene.h" />
     <ClInclude Include="Scene\titleScene.h" />
     <ClInclude Include="staging\Easing.h" />
+    <ClInclude Include="staging\EvenlyParticleStaging.h" />
     <ClInclude Include="staging\Shake.h" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +168,7 @@
     <ClCompile Include="Scene\selectScene.cpp" />
     <ClCompile Include="Scene\titleScene.cpp" />
     <ClCompile Include="staging\Easing.cpp" />
+    <ClCompile Include="staging\EvenlyParticleStaging.cpp" />
     <ClCompile Include="staging\Shake.cpp" />
   </ItemGroup>
   <ItemGroup>
