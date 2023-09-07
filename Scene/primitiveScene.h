@@ -9,11 +9,7 @@
 #include"../FbxLoder/Object3d_FBX.h"
 #include"../camera/FollowCamera.h"
 #include"../staging/Easing.h"
-#include"../Player/Player.h"
-#include"../Player/Enemy.h"
-#include"../Player/Boss.h"
-#include"../Player/uniteBoss.h"
-#include"../Player/CheckHItManager.h"
+#include"../Particle/Particle.h"
 #include<random>
 #include<time.h>
 #include<memory>
@@ -76,47 +72,18 @@ public:
 	//-------複数のシーンをまたいで使う物はここに書く-------
 	//背景
 	static std::unique_ptr<SingleSprite> sample_back;
-	//天球と地面
-	static std::unique_ptr<Model> SkyModel;
-	static std::unique_ptr<Model> SkyModel2;
-	static std::unique_ptr<Model> SkyModel3;
-	static std::unique_ptr<Model> groundModel;
-	static std::unique_ptr<object3dFBX> skySphere;
-	static std::unique_ptr<object3dFBX> skySphere2;
-	static std::unique_ptr<object3dFBX> skySphere3;
-	static std::unique_ptr<object3dFBX> groundPlane;
 	//ライト
 	static Light* light;
-	//敵リスト
-	static std::list<std::unique_ptr<Enemy>> enemyList;
-	//通常ボス
-	static std::unique_ptr<Boss> normalBoss;
-	//ユニットボス
-	static std::unique_ptr<uniteBoss> UniteBoss;
-	//プレイヤー
-	static std::unique_ptr<Player> playerPointer;
-	//ウェーブ表示スプライト
-	static std::unique_ptr<SingleSprite> enemyWaveBar;
-	static std::unique_ptr<SingleSprite> playerWaveIcon;
-	static std::list<std::unique_ptr<SingleSprite>> enemyWaveIcons;
-	const float totalWaveBarLength = 500;
-	const float waveBarPosX = 1180;
 	//ステージ番号
 	static int stageNum;
 	//最大ステージ番号
 	static const int maxStageNum = 3;
 	//ステージアイコンの基準座標
 	static XMFLOAT3 stageIconOffset;
-	//現在のステージレベル(敵を全滅させると1つ上がる)
-	static int nowStageLevel;
-	//ステージごとの最大レベル(ここまで到達するとボス出現)
-	static int maxStageLevel;
 	//チュートリアル
 	static bool isTutorial;
 	//クリアかオーバーか(true:クリア/false:オーバー)
 	static bool isClearOrOver;
 	//タイトルかセレクトか(true:セレクト/false:タイトル)
 	static bool isSelectOrTitle;
-	//アイコン同士の距離
-	static float nextWaveDis;
 };

@@ -36,27 +36,21 @@ private:
 private:
 	//マウス座標
 	XMFLOAT3 MOUSE_POS = { 0,0,0 };
-	//マウスカーソル
-	SingleSprite mouseCursur;
-	SingleSprite mouseCursurSub;
+	
 	//背景
 	SingleSprite selectBack;
 	//ステージアイコン
-	SingleSprite stage[5];
+	
 	//セレクトアイコン
-	SingleSprite selects[3];
-	float selectIconSizeX = 150;
+	
 	//プレイスタートボタン
-	SingleSprite spaceStart;
-	//チュートリアル誘導
-	SingleSprite toTutorial;
+	
+	
 	//ステージアイコンのイージング
-	easingManager stageIconEase;
+	
 	//ステージアイコンを動かしているかどうか
 	bool isMoveStageIcon = false;
-	//スタートボタンのイージング
-	easingManager playStartButtonEaseY;
-	easingManager playStartButtonEaseX;
+	
 	//入力フラグ
 	bool isPushStart = false;
 	//ステージ読み込みフラグ
