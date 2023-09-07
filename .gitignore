@@ -372,7 +372,7 @@ Engine/.gitattributes
 Engine/README.md
 
 # Resources directory
-!Resources/
+Resources/
 
 # Library directory
-!lib/
+*.lib
