@@ -375,4 +375,4 @@ Engine/README.md
 Resources/
 
 # Library directory
-lib/
+*.lib
