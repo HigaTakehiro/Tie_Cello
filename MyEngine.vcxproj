@@ -122,6 +122,8 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Input\dxInput.h" />
     <ClInclude Include="Light\Light.h" />
+    <ClInclude Include="Othello\Block.h" />
+    <ClInclude Include="Othello\Cell.h" />
     <ClInclude Include="Othello\Othello.h" />
     <ClInclude Include="Particle\Particle.h" />
     <ClInclude Include="Particle\particleManagerOnTime.h" />
@@ -162,6 +164,8 @@
     <ClCompile Include="Input\dxInput.cpp" />
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Othello\Block.cpp" />
+    <ClCompile Include="Othello\Cell.cpp" />
     <ClCompile Include="Othello\Othello.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
     <ClCompile Include="Particle\particleManagerOnTime.cpp" />
