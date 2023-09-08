@@ -105,6 +105,7 @@
     <ClInclude Include="3D\CollisionPrimitive.h" />
     <ClInclude Include="3D\Object3DSingleLine.h" />
     <ClInclude Include="3D\ObjectCommon.h" />
+    <ClInclude Include="File\LoadCSV.h" />
     <ClInclude Include="Math\RKDVector.h" />
     <ClInclude Include="Math\SplineCurve.h" />
     <ClInclude Include="Audio\Audio.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="3D\CollisionPrimitive.cpp" />
     <ClCompile Include="3D\Object3DSingleLine.cpp" />
     <ClCompile Include="3D\ObjectCommon.cpp" />
+    <ClCompile Include="File\LoadCSV.cpp" />
     <ClCompile Include="Math\RKDVector.cpp" />
     <ClCompile Include="Math\SplineCurve.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
