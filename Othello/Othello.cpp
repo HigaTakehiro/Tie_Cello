@@ -1,5 +1,4 @@
 ﻿#include "Othello.h"
-#include <DxLib.h>
 
 // ファイルの読み込み
 #include <fstream>
@@ -55,7 +54,7 @@ void Othello::Draw(int offsetX, int offsetY)
 		int x = i % width;
 		int y = i / width;
 
-		unsigned int color = GetColor(0x00, 0xF0, 0x00);
+		/*unsigned int color = GetColor(0x00, 0xF0, 0x00);
 		if ((x + y) % 2) color = GetColor(0x00, 0xC0, 0x00);
 
 		DrawBox(circleSize * x + offsetX, circleSize * y + offsetY,
@@ -74,7 +73,7 @@ void Othello::Draw(int offsetX, int offsetY)
 			continue;
 		}
 
-		DrawCircle(circleSize * x + circleOffsetX, circleSize * y + circleOffsetY, circleSize / 2, color, true);
+		DrawCircle(circleSize * x + circleOffsetX, circleSize * y + circleOffsetY, circleSize / 2, color, true);*/
 	}
 }
 
@@ -253,7 +252,7 @@ int Othello::Load(const std::string& filePath)
 
 	if (ifs.fail())
 	{
-		OutputDebugStringA("ファイルが開けません。\n");
+		//OutputDebugStringA("ファイルが開けません。\n");
 		return -1;
 	}
 
