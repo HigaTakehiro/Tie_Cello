@@ -18,7 +18,8 @@ playScene::~playScene()
 
 void playScene::loadResources()
 {
-
+	test = std::make_unique<EvenlyStaging>();
+	test->init();
 }
 
 void playScene::initialize()
@@ -31,12 +32,28 @@ void playScene::initialize()
 void playScene::setParameter()
 {
 	isNextScene = false;
+	test->updata(false);
 }
 
 void playScene::updata()
 {
 	//ライト更新
 	light->Update();
+
+	if (input->Triger(DIK_RIGHT))
+	{
+		white++;
+	}
+	if (input->Triger(DIK_LEFT))
+	{
+		black++;
+	}
+
+	float nowratio = (float)white / (float)(white + black);
+
+	EvenlyStaging::ratioSet(nowratio, 0.3f);
+
+	test->updata(false);
 
 	//次のシーンへの移行条件
 	if (input->Triger(DIK_SPACE))
@@ -48,6 +65,7 @@ void playScene::updata()
 void playScene::drawBack()
 {
 	sample_back->drawSprite(directx->cmdList.Get());
+	test->draw2D();
 }
 
 void playScene::draw3D()
@@ -60,5 +78,5 @@ void playScene::draw2D()
 
 void playScene::tutorial()
 {
-	
+
 }
