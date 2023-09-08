@@ -54,6 +54,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	bool isSetGray = false;
 
+	EvenlyStaging::setstaticdata(posteffect, &directx);
+
 	//FPSˆ—
 	FpsManager fps;
 

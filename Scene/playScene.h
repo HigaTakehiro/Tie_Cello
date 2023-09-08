@@ -1,5 +1,6 @@
 #pragma once
 #include "primitiveScene.h"
+#include"../staging/EvenlyStaging.h"
 
 class playScene
 	:public primitiveScene
@@ -37,4 +38,9 @@ private:
 private:
 	//‰‰o—pƒJƒƒ‰
 	std::unique_ptr<Camera> stagingCamera;
+
+	std::unique_ptr<EvenlyStaging> test;
+
+	int white = 1;
+	int black = 1;
 };
