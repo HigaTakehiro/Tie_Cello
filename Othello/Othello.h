@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include <string>
+#include"../FbxLoder/Object3d_FBX.h"
 
 enum Color
 {
@@ -29,7 +30,11 @@ public: //メンバ関数
 
 	// 初期化
 	void Init();
-	// 描画
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="offsetX">全体のオフセット</param>
+	/// <param name="offsetY">全体のオフセット</param>
 	void Draw(int offsetX = 0, int offsetY = 0);
 	// リセット
 	void Reset();
@@ -40,6 +45,7 @@ public: //メンバ関数
 	int Load(const std::string& filePath);
 
 	// スキップ判定
+	//置ける所がなければスキップ
 	bool IsSkip(Color color);
 
 	int GetWidth() const { return width; }

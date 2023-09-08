@@ -164,13 +164,16 @@ bool Othello::IsSkip(Color color)
 {
 	bool result = true;
 
+	//とりあえず置けるところを全て判定
 	for (int i = 0; i < width * height; i++)
 	{
+		//置けるところがあったら抜ける
 		if (result == false)
 		{
 			break;
 		}
 
+		//石が
 		if (cell[i] != Color::EMPTY)
 		{
 			continue;
@@ -273,13 +276,19 @@ int Othello::Load(const std::string& filePath)
 		}
 	}
 
+	//ステージの横幅
 	width = num[0];
+
+	//ステージの立幅
 	height = num[1];
+
+	//開始時の色
 	startColor = num[2];
 
 	int* cellArray = new int[(width * height)];
 	File::LoadMapChip(ifs, cellArray, width * height);
 
+	//ここでデータを入力
 	for (int i = 0; i < width * height; i++)
 	{
 		cell.push_back(static_cast<Color>(cellArray[i]));
