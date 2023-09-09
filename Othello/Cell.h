@@ -23,6 +23,9 @@ private:
 	void reverseCell();
 
 public:
+	Cell();
+	~Cell();
+
 	/// <summary>
 	/// 静的データセット
 	/// </summary>
@@ -69,7 +72,7 @@ private:
 	static bool isMove;
 
 	//オブジェクト
-	std::unique_ptr<object3dFBX> cellObject;
+	object3dFBX* cellObject = nullptr;
 	//イージング
 	easingManager rotEasing;
 	//ウラ・オモテ

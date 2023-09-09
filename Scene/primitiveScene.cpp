@@ -4,6 +4,7 @@ directX* primitiveScene::directx = nullptr;
 dxinput* primitiveScene::input = nullptr;
 Audio* primitiveScene::audio = nullptr;
 Light* primitiveScene::light = nullptr;
+Camera* primitiveScene::camera = nullptr;
 std::unique_ptr<SingleSprite> primitiveScene::sample_back = std::make_unique<SingleSprite>();
 int primitiveScene::stageNum = 0;
 XMFLOAT3 primitiveScene::stageIconOffset = { 340,360,0 };
@@ -43,8 +44,15 @@ void primitiveScene::setStaticData(directX* Directx, dxinput* Input, Audio* Audi
 	light->SetLightColor({ 1,1,1 });
 	light->SetLightDir({ 0,-1,0,0 });
 
+	camera = new Camera();
+	camera->SetEye({ 0.0f,10.0f,-30.0f });
+	camera->SetTarget({ 0.0f,0.0f,0.0f });
+	camera->UpdateProjectionMatrix();
+	camera->UpdateViewMatrix();
+
 	//3dオブジェクト生成
 	object3dFBX::setLight(light);
+	object3dFBX::SetCamera(camera);
 	object3dFBX::SetDevice(directx->dev.Get());
 	object3dFBX::CreateGraphicsPipeline();
 	object3dFBX::CreateGraphicsPipelineSimple();

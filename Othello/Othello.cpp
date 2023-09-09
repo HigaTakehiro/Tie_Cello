@@ -22,7 +22,7 @@ void Othello::Init()
 
 void Othello::updata(XMFLOAT3 mousepos)
 {
-
+	playerInput();
 
 	isNowPlayerPointBlock(mousepos);
 
@@ -39,24 +39,25 @@ void Othello::updata(XMFLOAT3 mousepos)
 	{
 		newblock->updata();
 	}
+
+	blackCellCount = 0;
+	whiteCellCount = 0;
+
+	for (size_t i = 0; i < GetSize(); i++)
+	{
+		if (GetCell(i) == Color::BLACK)
+		{
+			blackCellCount++;
+		}
+		else if (GetCell(i) == Color::WHITE)
+		{
+			whiteCellCount++;
+		}
+	}
 }
 
-void Othello::Draw(int offsetX, int offsetY)
+void Othello::Draw()
 {
-	int circleOffsetX = offsetX + circleSize / 2;
-	int circleOffsetY = offsetY + circleSize / 2;
-
-	for (int i = 0; i < width * height; i++)
-	{
-		if (cell[i] == Color::HOLE)
-		{
-			continue;
-		}
-
-		int x = i % width;
-		int y = i / width;
-	}
-
 	for (std::unique_ptr<Block>& newblock : blockList)
 	{
 		newblock->draw3D();
@@ -73,8 +74,13 @@ void Othello::Reset()
 
 int Othello::Put(Color color)
 {
+	if (nowPlayerPointBlockIndex == -1)
+	{
+		return -1;
+	}
+
 	//置く場所のインデックスをセット
-	int index = y * width + x;
+	int index = nowPlayerPointBlockIndex;
 
 	//置く場所に何かしら置いてあったら
 	if (cell[index] != Color::EMPTY)
@@ -109,13 +115,14 @@ int Othello::Put(Color color)
 				continue;
 			}
 			//場外だったらとばす
-			if (x + j < 0 || y + i < 0 || x + j >= width || y + i >= height)
+			if (nowPlayerPointBlockX + j < 0 || nowPlayerPointBlockZ + i < 0 ||
+				nowPlayerPointBlockX + j >= width || nowPlayerPointBlockZ + i >= height)
 			{
 				continue;
 			}
 
 			//3*3マスの中の1マスのインデックスをセット
-			index = (y + i) * width + (x + j);
+			index = (nowPlayerPointBlockZ + i) * width + (nowPlayerPointBlockX + j);
 
 			//1マス周囲が同じ色か空だったらとばす
 			if (cell[index] != other)
@@ -130,7 +137,8 @@ int Othello::Put(Color color)
 			for (int s = 2; s < size; s++)
 			{
 				//場外だったらとばす
-				if (x + (j * s) < 0 || y + (i * s) < 0 || x + (j * s) >= width || y + (i * s) >= height)
+				if (nowPlayerPointBlockX + (j * s) < 0 || nowPlayerPointBlockZ + (i * s) < 0 ||
+					nowPlayerPointBlockX + (j * s) >= width || nowPlayerPointBlockZ + (i * s) >= height)
 				{
 					break;
 				}
@@ -151,7 +159,7 @@ int Othello::Put(Color color)
 					if (cell[index] == color)
 					{
 						//石を置く
-						index = y * width + x;
+						index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
 						cell[index] = color;
 
 						//ひっくり返した枚数
@@ -188,6 +196,9 @@ void Othello::isNowPlayerPointBlock(XMFLOAT3 mousepos)
 			nowPlayerPointBlockIndex = newblock->getIndex();
 
 			Cell::playerBlockPosUpdata(newblock->getBlockPosition());
+
+			nowPlayerPointBlockX = nowPlayerPointBlockIndex % width;
+			nowPlayerPointBlockZ = nowPlayerPointBlockIndex / width;
 		}
 	}
 }
@@ -301,6 +312,54 @@ bool Othello::IsSkip(Color color)
 	return result;
 }
 
+void Othello::playerInput()
+{
+	if (nowPlayerPointBlockIndex == -1)
+	{
+		return;
+	}
+
+	if (input->Mouse_LeftTriger())
+	{
+		if (IsSkip(nowColor))
+		{
+			if (isSkip)
+			{
+				isFinish = true;
+			}
+			else
+			{
+				isSkip = true;
+
+				if (nowColor == Color::BLACK)
+				{
+					nowColor = Color::WHITE;
+				}
+				else if (nowColor == Color::WHITE)
+				{
+					nowColor = Color::BLACK;
+				}
+			}
+		}
+		else
+		{
+			isSkip = false;
+
+			if (Put(nowColor) != 0)
+			{
+				if (nowColor == Color::BLACK)
+				{
+					nowColor = Color::WHITE;
+				}
+				else if (nowColor == Color::WHITE)
+				{
+					nowColor = Color::BLACK;
+				}
+			}
+		}
+	}
+}
+
 int Othello::Load(const std::string& filePath)
 {
 	if (filePath.empty())
@@ -365,12 +424,17 @@ int Othello::Load(const std::string& filePath)
 		if (cell[i] != HOLE || cell[i] != NONE)
 		{
 			std::unique_ptr<Block> newblock = std::unique_ptr<Block>();
-			newblock->init(blockType(i % 2),
+
+			blockType type = blockType(i % 2);
+
+			newblock->init(type,
 				{
 					drawOffsetX + ((float)x * blockDistance),
 					0.0f,
 					drawOffsetZ - ((float)z * blockDistance)
 				}, i);
+
+			blockList.push_back(std::move(newblock));
 		}
 	}
 

@@ -33,8 +33,10 @@ void playScene::setParameter()
 {
 	Cell::setStaticData(directx);
 	Block::setStaticData(directx);
+	Othello::setInput(input);
+	othello = std::make_unique<Othello>();
 	othello->Init();
-	othello->Load("./Resources/StageData/tutorial.csv");
+	othello->Load("Resources/StageData/tutorial.csv");
 	isNextScene = false;
 }
 
@@ -67,7 +69,7 @@ void playScene::updata()
 
 	test->updata(false);
 
-
+	othello->updata(input->mousePosition);
 
 	//ŽŸ‚ÌƒV[ƒ“‚Ö‚ÌˆÚsðŒ
 	if (input->Triger(DIK_SPACE))
@@ -84,6 +86,7 @@ void playScene::drawBack()
 
 void playScene::draw3D()
 {
+	othello->Draw();
 }
 
 void playScene::draw2D()

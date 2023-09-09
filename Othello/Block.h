@@ -18,6 +18,9 @@ private:
 	static void loadResources();
 
 public:
+	Block();
+	~Block();
+
 	/// <summary>
 	/// 静的データセット
 	/// </summary>
@@ -64,7 +67,7 @@ private:
 	static std::unique_ptr<Model> blockModel_2;
 
 	//オブジェクト
-	std::unique_ptr<object3dFBX> blockObject;
+	object3dFBX* blockObject = nullptr;
 	//イージング
 	easingManager startEasing;
 	//初期位置

@@ -33,6 +33,16 @@ void Cell::reverseCell()
 	}
 }
 
+Cell::Cell()
+{
+
+}
+
+Cell::~Cell()
+{
+	delete(cellObject);
+}
+
 void Cell::setStaticData(directX* d)
 {
 	dx = d;
@@ -46,7 +56,7 @@ void Cell::playerBlockPosUpdata(XMFLOAT3 blockPos)
 
 void Cell::init(XMFLOAT3 pos, cellType type, bool put)
 {
-	cellObject = std::make_unique<object3dFBX>();
+	cellObject = new object3dFBX;
 	cellObject->initialize();
 	cellObject->SetModel(cellModel.get());
 

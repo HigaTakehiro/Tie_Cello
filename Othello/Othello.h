@@ -23,10 +23,14 @@ public:
 	static dxinput* input;
 
 private: //メンバ変数
+
+	//マップデータ
 	std::vector<Color> cell;
 	std::vector<Color> initCell;
+
 	int width;  //幅
 	int height; //高さ
+
 	bool startColor; //開始時の色
 
 	//石とブロックのリスト
@@ -42,6 +46,22 @@ private: //メンバ変数
 
 	//1ブロックの幅
 	const float blockDistance = 10.0f;
+
+	//終了フラグ
+	bool isFinish = false;
+
+	//スキップフラグ
+	bool isSkip = false;
+
+	//現在選択しているインデックスの横幅・縦幅
+	int nowPlayerPointBlockX = 0;
+	int nowPlayerPointBlockZ = 0;
+
+	//現在の色
+	Color nowColor = Color::BLACK;
+
+	int blackCellCount = 0;
+	int whiteCellCount = 0;
 
 public: //メンバ関数
 	static void setInput(dxinput* in) { input = in; }
@@ -61,9 +81,7 @@ public: //メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	/// <param name="offsetX">全体のオフセット</param>
-	/// <param name="offsetY">全体のオフセット</param>
-	void Draw(int offsetX = 0, int offsetY = 0);
+	void Draw();
 
 	// リセット
 	void Reset();
@@ -74,7 +92,7 @@ public: //メンバ関数
 	//どのブロックをマウスで指しているか判定
 	void isNowPlayerPointBlock(XMFLOAT3 mousepos);
 
-	
+	//プレイヤー入力
 	void playerInput();
 
 	// ステージ読み込み

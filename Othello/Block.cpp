@@ -10,6 +10,16 @@ void Block::loadResources()
 	blockModel_2.reset(FbxLoader::GetInstance()->LoadmodelFromFile("Board_2"));
 }
 
+Block::Block()
+{
+
+}
+
+Block::~Block()
+{
+	delete(blockObject);
+}
+
 void Block::setStaticData(directX* d)
 {
 	dx = d;
@@ -18,7 +28,7 @@ void Block::setStaticData(directX* d)
 
 void Block::init(blockType type, XMFLOAT3 position, int id)
 {
-	blockObject = std::make_unique<object3dFBX>();
+	blockObject = new object3dFBX;
 	blockObject->initialize();
 
 	if (type == blockType::light)
