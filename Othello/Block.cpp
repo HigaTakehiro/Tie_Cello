@@ -12,7 +12,6 @@ void Block::loadResources()
 
 Block::Block()
 {
-
 }
 
 Block::~Block()
@@ -28,6 +27,7 @@ void Block::setStaticData(directX* d)
 
 void Block::init(blockType type, XMFLOAT3 position, int id)
 {
+	//オブジェクト生成
 	blockObject = new object3dFBX;
 	blockObject->initialize();
 

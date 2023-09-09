@@ -12,6 +12,8 @@ Othello::Othello() :
 	width(8),
 	height(8)
 {
+	cellList.clear();
+	blockList.clear();
 }
 
 void Othello::Init()

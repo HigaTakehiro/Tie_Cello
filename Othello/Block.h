@@ -61,19 +61,26 @@ public:
 	XMFLOAT3 getBlockPosition() { return blockObject->getPosition(); }
 
 private:
+	//dierctx
 	static directX* dx;
+
 	//モデルデータ
 	static std::unique_ptr<Model> blockModel_1;
 	static std::unique_ptr<Model> blockModel_2;
 
+public:
 	//オブジェクト
 	object3dFBX* blockObject = nullptr;
+
 	//イージング
 	easingManager startEasing;
+
 	//初期位置
 	XMFLOAT3 startPos;
+
 	//終端位置
 	XMFLOAT3 endPos;
+
 	//マップ全体で何番目のインデックスかどうか(初期値-1)
 	int index = -1;
 };
