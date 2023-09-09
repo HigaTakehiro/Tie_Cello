@@ -12,12 +12,25 @@ void Cell::loadResources()
 
 void Cell::reverseCell()
 {
-	if (!isReverse)
+	if (!isReverse || !isPut)
 	{
 		return;
 	}
 
-	cellObject->setRotMatrix(rotEasing.easing(), 0.0f, 0.0f);
+	cellObject->setRotMatrix(0.0f, 0.0f, rotEasing.easing());
+
+	if (rotEasing.getIsActive())
+	{
+		if (myType == cellType::white)
+		{
+			myType = cellType::black;
+		}
+		else if (myType == cellType::black)
+		{
+			myType = cellType::white;
+		}
+		isReverse = false;
+	}
 }
 
 void Cell::setStaticData(directX* d)
@@ -31,7 +44,7 @@ void Cell::playerBlockPosUpdata(XMFLOAT3 blockPos)
 	playerPointBlockPos = blockPos;
 }
 
-void Cell::init(cellType type)
+void Cell::init(XMFLOAT3 pos, cellType type)
 {
 	cellObject = std::make_unique<object3dFBX>();
 	cellObject->initialize();
@@ -47,7 +60,32 @@ void Cell::init(cellType type)
 
 void Cell::updata()
 {
+	if (!isPut)
+	{
+		cellObject->SetPosition(
+			{
+				playerPointBlockPos.x,
+				playerPointBlockPos.y + 10,
+				playerPointBlockPos.z
+			}
+		);
+	}
+
 	reverseCell();
+
+	cellObject->updata();
+}
+
+void Cell::setReverce()
+{
+	if (!isPut && isReverse)
+	{
+		return;
+	}
+	rotEasing.set(easingType::easeOut, easingPattern::Quadratic, 40,
+		cellObject->getRotation().z, cellObject->getRotation().z + 180);
+
+	isReverse = true;
 }
 
 void Cell::draw3D()

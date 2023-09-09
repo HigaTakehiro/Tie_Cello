@@ -38,12 +38,17 @@ public:
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void init(cellType type);
+	void init(XMFLOAT3 pos, cellType type);
 
 	/// <summary>
 	/// XV
 	/// </summary>
 	void updata();
+
+	/// <summary>
+	/// ‚Ğ‚Á‚­‚è•Ô‚·€”õ
+	/// </summary>
+	void setReverce();
 
 	/// <summary>
 	/// •`‰æ

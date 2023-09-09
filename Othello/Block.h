@@ -39,6 +39,13 @@ public:
 	/// </summary>
 	void draw3D();
 
+	/// <summary>
+	///	マウスが指しているブロックかどうか
+	/// </summary>
+	/// <param name="mousepos">マウス座標</param>
+	/// <returns>判定結果</returns>
+	bool isThisPlayerPoint(XMFLOAT2 mousepos);
+
 private:
 	static directX* dx;
 	//モデルデータ

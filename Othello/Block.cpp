@@ -44,3 +44,17 @@ void Block::draw3D()
 {
 	blockObject->Draw(dx->cmdList.Get());
 }
+
+bool Block::isThisPlayerPoint(XMFLOAT2 mousepos)
+{
+	XMFLOAT2 thispos = blockObject->worldToScleen();
+
+	float dis = sqrtf(powf(thispos.x - mousepos.x, 2) + powf(thispos.y - mousepos.y, 2));
+
+	if (dis <= 15.0f)
+	{
+		return true;
+	}
+
+	return false;
+}

@@ -173,7 +173,7 @@ bool Othello::IsSkip(Color color)
 			break;
 		}
 
-		//石が
+		//ブロックに何か置いてあったらとばす
 		if (cell[i] != Color::EMPTY)
 		{
 			continue;

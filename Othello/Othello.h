@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include"../FbxLoder/Object3d_FBX.h"
+#include"Cell.h"
+#include"Block.h"
 
 enum Color
 {
@@ -24,23 +26,32 @@ private: //メンバ変数
 	int height; //高さ
 	bool startColor; //開始時の色
 
+	std::vector<std::unique_ptr<Cell>> cellList;
+	std::vector<std::unique_ptr<Block>> blockList;
+
 public: //メンバ関数
 	Othello();
 	~Othello() {}
 
 	// 初期化
 	void Init();
+
+	//更新
+	void updata(int x, int y, Color color);
+
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="offsetX">全体のオフセット</param>
 	/// <param name="offsetY">全体のオフセット</param>
 	void Draw(int offsetX = 0, int offsetY = 0);
+
 	// リセット
 	void Reset();
 
 	// 石を置く
 	int Put(int x, int y, Color color);
+
 	// ステージ読み込み
 	int Load(const std::string& filePath);
 
