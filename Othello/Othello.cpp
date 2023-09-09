@@ -91,14 +91,21 @@ void Othello::Reset()
 
 int Othello::Put(int x, int y, Color color)
 {
+	//置く場所のインデックスをセット
 	int index = y * width + x;
+
+	//置く場所に何かしら置いてあったら
 	if (cell[index] != Color::EMPTY)
 	{
 		return 0;
 	}
 
+	//ひっくり返った枚数
 	int count = 0;
-	Color other = Color::EMPTY; //相手の色
+
+	//相手の色
+	Color other = Color::EMPTY;
+
 	if (color == Color::BLACK)
 	{
 		other = Color::WHITE;
@@ -108,52 +115,76 @@ int Othello::Put(int x, int y, Color color)
 		other = Color::BLACK;
 	}
 
+	//置くマスを中心とした３行
 	for (int i = -1; i <= 1; i++)
 	{
+		//置くマスを中心とした３列
 		for (int j = -1; j <= 1; j++)
 		{
+			//中心(置くマス)だったらとばす
 			if (i == 0 && j == 0)
 			{
 				continue;
 			}
+			//場外だったらとばす
 			if (x + j < 0 || y + i < 0 || x + j >= width || y + i >= height)
 			{
 				continue;
 			}
+
+			//3*3マスの中の1マスのインデックスをセット
 			index = (y + i) * width + (x + j);
+
+			//1マス周囲が同じ色か空だったらとばす
 			if (cell[index] != other)
 			{
 				continue;
 			}
 
+			//マップの最大幅
 			const int size = 8;
+
+			//2マス先以降を判定
 			for (int s = 2; s < size; s++)
 			{
+				//場外だったらとばす
 				if (x + (j * s) < 0 || y + (i * s) < 0 || x + (j * s) >= width || y + (i * s) >= height)
 				{
 					break;
 				}
 
+				//2マス先以降のインデックスをセット
 				index += i * width + j;
+
+				//インデックスがマップの配列サイズ内だったら
 				if (index >= 0 && index < cell.size())
 				{
+					//2マス先以降に石がないなら抜ける
 					if (cell[index] != Color::BLACK && cell[index] != Color::WHITE)
 					{
 						break;
 					}
 
+					//隣が違う色で、2マス先以降に同じ色があった場合ひっくり返す
 					if (cell[index] == color)
 					{
+						//石を置く
 						index = y * width + x;
 						cell[index] = color;
+
+						//ひっくり返した枚数
 						count += s;
 
+						//間のマスをひっくり返す
 						for (int n = 1; n < s; n++)
 						{
+							//ひっくり返すマスのインデックスをセット
 							index += i * width + j;
+							//ひっくり返す(色を変える)
 							cell[index] = color;
 						}
 
+						//ひっくり返したら別の方向を探索するため抜ける
 						break;
 					}
 				}
@@ -185,7 +216,7 @@ bool Othello::IsSkip(Color color)
 			continue;
 		}
 
-		//他のタイプ
+		//置く色に対して相手のタイプ
 		Color other = Color::EMPTY;
 
 		//引数が白か黒だったら反転したものをセット
@@ -228,7 +259,7 @@ bool Othello::IsSkip(Color color)
 				//3*3マスの中の1マスのインデックスをセット
 				index = (y + dirY) * width + (x + dirX);
 
-				//1マス周囲が違う色だったらとばす
+				//1マス周囲が同じ色か空だったらとばす
 				if (cell[index] != other)
 				{
 					continue;
