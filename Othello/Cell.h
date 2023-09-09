@@ -57,6 +57,8 @@ public:
 
 	bool getIsPut() { return isPut; }
 
+	void setIndex(int id) { index = id; }
+
 private:
 	static directX* dx;
 	//モデルデータ
@@ -76,4 +78,6 @@ private:
 	bool isPut = false;
 	//ひっくり返している途中かどうか
 	bool isReverse = false;
+	//マップ全体で何番目のインデックスかどうか(初期値-1)
+	int index = -1;
 };

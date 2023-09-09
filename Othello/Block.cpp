@@ -16,7 +16,7 @@ void Block::setStaticData(directX* d)
 	loadResources();
 }
 
-void Block::init(blockType type, XMFLOAT3 position)
+void Block::init(blockType type, XMFLOAT3 position, int id)
 {
 	blockObject = std::make_unique<object3dFBX>();
 	blockObject->initialize();
@@ -33,6 +33,8 @@ void Block::init(blockType type, XMFLOAT3 position)
 	startPos = position;
 	blockObject->SetPosition(position);
 	blockObject->SetScale({ 1,1,1 });
+
+	index = id;
 }
 
 void Block::updata()

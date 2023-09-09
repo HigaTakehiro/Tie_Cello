@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void init(blockType type, XMFLOAT3 position);
+	void init(blockType type, XMFLOAT3 position, int id);
 
 	/// <summary>
 	/// 更新
@@ -60,4 +60,6 @@ private:
 	XMFLOAT3 startPos;
 	//終端位置
 	XMFLOAT3 endPos;
+	//マップ全体で何番目のインデックスかどうか(初期値-1)
+	int index = -1;
 };
