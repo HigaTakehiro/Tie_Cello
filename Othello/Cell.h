@@ -38,7 +38,7 @@ public:
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void init(XMFLOAT3 pos, cellType type);
+	void init(XMFLOAT3 pos, cellType type, bool put);
 
 	/// <summary>
 	/// XV

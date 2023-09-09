@@ -4,6 +4,7 @@
 #include"../FbxLoder/Object3d_FBX.h"
 #include"Cell.h"
 #include"Block.h"
+#include"../Input/dxInput.h"
 
 enum Color
 {
@@ -37,7 +38,7 @@ public: //メンバ関数
 	void Init();
 
 	//更新
-	void updata(int x, int y, Color color);
+	void updata(Color color, XMFLOAT3 mousepos);
 
 	/// <summary>
 	/// 描画

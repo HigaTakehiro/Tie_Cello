@@ -32,7 +32,6 @@ void playScene::initialize()
 void playScene::setParameter()
 {
 	isNextScene = false;
-	test->updata(false);
 }
 
 void playScene::updata()
@@ -49,7 +48,16 @@ void playScene::updata()
 		black++;
 	}
 
-	float nowratio = (float)white / (float)(white + black);
+	float nowratio;
+
+	if (white == 0 && black == 0)
+	{
+		nowratio = 0.5f;
+	}
+	else
+	{
+		nowratio = (float)white / (float)(white + black);
+	}
 
 	EvenlyStaging::ratioSet(nowratio, 0.3f);
 

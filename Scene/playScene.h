@@ -1,6 +1,7 @@
 #pragma once
 #include "primitiveScene.h"
 #include"../staging/EvenlyStaging.h"
+#include"../Othello/Othello.h"
 
 class playScene
 	:public primitiveScene
@@ -41,6 +42,8 @@ private:
 
 	std::unique_ptr<EvenlyStaging> test;
 
-	int white = 1;
-	int black = 1;
+	std::unique_ptr<Othello> othello;
+
+	int white = 0;
+	int black = 0;
 };

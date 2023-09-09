@@ -44,11 +44,13 @@ void Cell::playerBlockPosUpdata(XMFLOAT3 blockPos)
 	playerPointBlockPos = blockPos;
 }
 
-void Cell::init(XMFLOAT3 pos, cellType type)
+void Cell::init(XMFLOAT3 pos, cellType type, bool put)
 {
 	cellObject = std::make_unique<object3dFBX>();
 	cellObject->initialize();
 	cellObject->SetModel(cellModel.get());
+
+	myType = type;
 
 	if (type == cellType::black)
 	{
@@ -56,6 +58,8 @@ void Cell::init(XMFLOAT3 pos, cellType type)
 	}
 
 	cellObject->SetScale({ 1,1,1 });
+
+	isPut = put;
 }
 
 void Cell::updata()

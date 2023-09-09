@@ -162,6 +162,7 @@ int Othello::Put(int x, int y, Color color)
 
 bool Othello::IsSkip(Color color)
 {
+	//結果
 	bool result = true;
 
 	//とりあえず置けるところを全て判定
