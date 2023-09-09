@@ -39,6 +39,10 @@ void Othello::Init()
 	//initCell = cell;
 }
 
+void Othello::updata(Color color, XMFLOAT3 mousepos)
+{
+}
+
 void Othello::Draw(int offsetX, int offsetY)
 {
 	int circleOffsetX = offsetX + circleSize / 2;
@@ -165,10 +169,11 @@ bool Othello::IsSkip(Color color)
 	//結果
 	bool result = true;
 
-	//とりあえず置けるところを全て判定
+	//とりあえず全マスを中心とした3*3を全て判定
+	// i は一次元配列のインデックス
 	for (int i = 0; i < width * height; i++)
 	{
-		//置けるところがあったら抜ける
+		//置けるなら抜ける
 		if (result == false)
 		{
 			break;
@@ -180,7 +185,10 @@ bool Othello::IsSkip(Color color)
 			continue;
 		}
 
-		Color other = Color::EMPTY; //相手の色
+		//他のタイプ
+		Color other = Color::EMPTY;
+
+		//引数が白か黒だったら反転したものをセット
 		if (color == Color::BLACK)
 		{
 			other = Color::WHITE;
@@ -190,44 +198,67 @@ bool Othello::IsSkip(Color color)
 			other = Color::BLACK;
 		}
 
+		//現在の一次元配列インデックス
 		int index = i;
-		int x = i % width;
-		int y = i / width;
 
+		//横座標：インデックスをマップの横幅で割った余り
+		int x = index % width;
+
+		//縦座標：インデックスをマップの横幅で割り小数点以下切り捨て
+		int y = index / width;
+
+		//置くマスを中心とした３行
 		for (int dirY = -1; dirY <= 1; dirY++)
 		{
+			//置くマスを中心とした３列
 			for (int dirX = -1; dirX <= 1; dirX++)
 			{
+				//中心(置くマス)だったらとばす
 				if (dirY == 0 && dirX == 0)
 				{
 					continue;
 				}
+
+				//場外だったらとばす
 				if (x + dirX < 0 || y + dirY < 0 || x + dirX >= width || y + dirY >= height)
 				{
 					continue;
 				}
+
+				//3*3マスの中の1マスのインデックスをセット
 				index = (y + dirY) * width + (x + dirX);
+
+				//1マス周囲が違う色だったらとばす
 				if (cell[index] != other)
 				{
 					continue;
 				}
 
+				//マップの最大幅
 				const int size = 8;
+
+				//2マス先以降を判定
 				for (int s = 2; s < size; s++)
 				{
+					//場外だったらとばす
 					if (x + (dirX * s) < 0 || y + (dirY * s) < 0 || x + (dirX * s) >= width || y + (dirY * s) >= height)
 					{
 						break;
 					}
 
+					//2マス先以降のインデックスをセット
 					index += dirY * width + dirX;
+
+					//インデックスがマップの配列サイズ内だったら
 					if (index >= 0 && index < cell.size())
 					{
+						//2マス先以降に石がないなら抜ける
 						if (cell[index] != Color::BLACK && cell[index] != Color::WHITE)
 						{
 							break;
 						}
 
+						//隣が違う色で、2マス先以降に同じ色があった場合置けるので抜ける
 						if (cell[index] == color)
 						{
 							result = false;
