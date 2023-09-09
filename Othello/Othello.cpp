@@ -4,6 +4,8 @@
 #include <fstream>
 #include "../File/LoadCSV.h"
 
+dxinput* Othello::input = nullptr;
+
 Othello::Othello() :
 	cell{},
 	initCell{},
@@ -16,31 +18,27 @@ void Othello::Init()
 {
 	cell.reserve(static_cast<size_t>(width * height));
 	initCell.reserve(cell.size());
-
-	//cell.resize(static_cast<size_t>(width * height));
-
-	//cell[9] = BLACK;
-	//cell[18] = BLACK;
-	//cell[27] = BLACK;
-	//cell[36] = BLACK;
-	//cell[45] = BLACK;
-	//cell[54] = BLACK;
-	//cell[63] = BLACK;
-
-	//cell[7] = WHITE;
-	//cell[14] = WHITE;
-	//cell[21] = WHITE;
-	//cell[28] = WHITE;
-	//cell[35] = WHITE;
-	//cell[42] = WHITE;
-	//cell[49] = WHITE;
-	//cell[56] = WHITE;
-
-	//initCell = cell;
 }
 
-void Othello::updata(Color color, XMFLOAT3 mousepos)
+void Othello::updata(XMFLOAT3 mousepos)
 {
+
+
+	isNowPlayerPointBlock(mousepos);
+
+	if (nowPlayerPointBlockIndex != -1)
+	{
+		IsSkip(GetCell(nowPlayerPointBlockIndex));
+	}
+	else
+	{
+		IsSkip(Color::NONE);
+	}
+
+	for (std::unique_ptr<Block>& newblock : blockList)
+	{
+		newblock->updata();
+	}
 }
 
 void Othello::Draw(int offsetX, int offsetY)
@@ -57,27 +55,11 @@ void Othello::Draw(int offsetX, int offsetY)
 
 		int x = i % width;
 		int y = i / width;
+	}
 
-		/*unsigned int color = GetColor(0x00, 0xF0, 0x00);
-		if ((x + y) % 2) color = GetColor(0x00, 0xC0, 0x00);
-
-		DrawBox(circleSize * x + offsetX, circleSize * y + offsetY,
-				circleSize * (x + 1) + offsetX, circleSize * (y + 1) + offsetY, color, true);
-
-		if (cell[i] == Color::BLACK)
-		{
-			color = GetColor(0, 0, 0);
-		}
-		else if (cell[i] == Color::WHITE)
-		{
-			color = GetColor(0xFF, 0xFF, 0xFF);
-		}
-		else
-		{
-			continue;
-		}
-
-		DrawCircle(circleSize * x + circleOffsetX, circleSize * y + circleOffsetY, circleSize / 2, color, true);*/
+	for (std::unique_ptr<Block>& newblock : blockList)
+	{
+		newblock->draw3D();
 	}
 }
 
@@ -89,7 +71,7 @@ void Othello::Reset()
 	}
 }
 
-int Othello::Put(int x, int y, Color color)
+int Othello::Put(Color color)
 {
 	//置く場所のインデックスをセット
 	int index = y * width + x;
@@ -193,6 +175,21 @@ int Othello::Put(int x, int y, Color color)
 	}
 
 	return count;
+}
+
+void Othello::isNowPlayerPointBlock(XMFLOAT3 mousepos)
+{
+	nowPlayerPointBlockIndex = -1;
+
+	for (std::unique_ptr<Block>& newblock : blockList)
+	{
+		if (newblock->isThisPlayerPoint({ mousepos.x,mousepos.y }))
+		{
+			nowPlayerPointBlockIndex = newblock->getIndex();
+
+			Cell::playerBlockPosUpdata(newblock->getBlockPosition());
+		}
+	}
 }
 
 bool Othello::IsSkip(Color color)
@@ -355,6 +352,26 @@ int Othello::Load(const std::string& filePath)
 	for (int i = 0; i < width * height; i++)
 	{
 		cell.push_back(static_cast<Color>(cellArray[i]));
+	}
+
+	drawOffsetX = (0 - (width / 2)) * blockDistance;
+	drawOffsetZ = (0 + (height / 2)) * blockDistance;
+
+	for (int i = 0; i < cell.size(); i++)
+	{
+		int x = i % width;
+		int z = i / width;
+
+		if (cell[i] != HOLE || cell[i] != NONE)
+		{
+			std::unique_ptr<Block> newblock = std::unique_ptr<Block>();
+			newblock->init(blockType(i % 2),
+				{
+					drawOffsetX + ((float)x * blockDistance),
+					0.0f,
+					drawOffsetZ - ((float)z * blockDistance)
+				}, i);
+		}
 	}
 
 	initCell = cell;

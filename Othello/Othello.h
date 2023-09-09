@@ -20,6 +20,8 @@ class Othello
 public:
 	static const int circleSize = 90;
 
+	static dxinput* input;
+
 private: //メンバ変数
 	std::vector<Color> cell;
 	std::vector<Color> initCell;
@@ -27,18 +29,34 @@ private: //メンバ変数
 	int height; //高さ
 	bool startColor; //開始時の色
 
+	//石とブロックのリスト
 	std::vector<std::unique_ptr<Cell>> cellList;
 	std::vector<std::unique_ptr<Block>> blockList;
 
+	//現在マウスで指している位置インデックス(場外＆穴の場合は-1)
+	int nowPlayerPointBlockIndex = -1;
+
+	//描画オフセット
+	float drawOffsetX;
+	float drawOffsetZ;
+
+	//1ブロックの幅
+	const float blockDistance = 10.0f;
+
 public: //メンバ関数
+	static void setInput(dxinput* in) { input = in; }
+
 	Othello();
 	~Othello() {}
 
 	// 初期化
 	void Init();
 
-	//更新
-	void updata(Color color, XMFLOAT3 mousepos);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// /// <param name="mousepos">マウス座標</param>
+	void updata(XMFLOAT3 mousepos);
 
 	/// <summary>
 	/// 描画
@@ -51,7 +69,13 @@ public: //メンバ関数
 	void Reset();
 
 	// 石を置く
-	int Put(int x, int y, Color color);
+	int Put(Color color);
+
+	//どのブロックをマウスで指しているか判定
+	void isNowPlayerPointBlock(XMFLOAT3 mousepos);
+
+	
+	void playerInput();
 
 	// ステージ読み込み
 	int Load(const std::string& filePath);

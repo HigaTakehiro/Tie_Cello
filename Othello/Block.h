@@ -46,6 +46,17 @@ public:
 	/// <returns>判定結果</returns>
 	bool isThisPlayerPoint(XMFLOAT2 mousepos);
 
+	/// <summary>
+	/// インデックスを取得
+	/// </summary>
+	/// <returns>インデックス</returns>
+	int getIndex() { return index; }
+
+	/// <summary>
+	/// ブロックの座標を取得
+	/// </summary>
+	XMFLOAT3 getBlockPosition() { return blockObject->getPosition(); }
+
 private:
 	static directX* dx;
 	//モデルデータ

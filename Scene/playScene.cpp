@@ -31,6 +31,10 @@ void playScene::initialize()
 
 void playScene::setParameter()
 {
+	Cell::setStaticData(directx);
+	Block::setStaticData(directx);
+	othello->Init();
+	othello->Load("./Resources/StageData/tutorial.csv");
 	isNextScene = false;
 }
 
@@ -62,6 +66,8 @@ void playScene::updata()
 	EvenlyStaging::ratioSet(nowratio, 0.3f);
 
 	test->updata(false);
+
+
 
 	//ŽŸ‚ÌƒV[ƒ“‚Ö‚ÌˆÚsðŒ
 	if (input->Triger(DIK_SPACE))
