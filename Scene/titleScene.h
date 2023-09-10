@@ -1,5 +1,6 @@
 #pragma once
 #include"primitiveScene.h"
+#include <array>
 
 class titleScene
 	:public primitiveScene
@@ -35,6 +36,7 @@ private:
 	XMFLOAT3 MOUSE_POS = { 0,0,0 };
 	//”wŒi
 	SingleSprite titleBack;
+	std::array<SingleSprite, 8 * 2> titleChars;
 
 	//ƒ^ƒCƒgƒ‹
 	
