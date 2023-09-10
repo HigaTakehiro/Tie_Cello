@@ -5,7 +5,6 @@ PostEffect* EvenlyStaging::post = nullptr;
 directX* EvenlyStaging::dx = nullptr;
 float EvenlyStaging::clearRatio = 0;
 float EvenlyStaging::nowRatio = 0;
-bool EvenlyStaging::isWhite = false;
 int EvenlyStaging::whiteCount = 0;
 int EvenlyStaging::blackCount = 0;
 
@@ -34,8 +33,10 @@ void EvenlyStaging::init()
 	blackBack.generateSprite("black_color.png");
 }
 
-void EvenlyStaging::updata(bool isWhite)
+void EvenlyStaging::updata(bool iswhite)
 {
+	isWhite = iswhite;
+
 	changeBackSprite();
 
 	setParticle();
@@ -85,44 +86,28 @@ void EvenlyStaging::setParticle()
 
 	int lange = 260;
 
-	float nowratioline = nowRatio * lange;
+	float nowratioline = nowRatio * lange - 130;
 
 	if (isWhite)
 	{
-		float leftlimittonowratioline = nowratioline - (-130);
-		int startX;
-		if (leftlimittonowratioline != 0)
-		{
-			startX = Result % (int)(leftlimittonowratioline);
-		}
-		else
-		{
-			startX = Result % 130;
-		}
+		float leftlimittonowratioline = fabsf(nowratioline - (-130));
+		int startX = Result % (int)(leftlimittonowratioline);
 
 		newp->generate();
 		newp->color = { 0.5f,0.5f,0.5f,0.8f };
-		newp->set(300, { -130 + (float)startX,-30,-50 },
+		newp->set(300, { -130 + (float)startX,-30,-70 },
 			{ 0.0f,0.0f,0.4f },
 			{ 0,0,0 }, 1.5f, 1.5f);
 		particleList.push_back(std::move(newp));
 	}
 	else
 	{
-		float nowratiolinetorightlimit = 130 - nowratioline;
-		int startX;
-		if (nowratiolinetorightlimit != 0)
-		{
-			startX = Result % (int)(nowratiolinetorightlimit);
-		}
-		else
-		{
-			startX = Result % 130;
-		}
+		float nowratiolinetorightlimit = fabsf(130 - nowratioline);
+		int startX = Result % (int)(nowratiolinetorightlimit);
 
 		newp->generate();
 		newp->color = { 0.5f,0.5f,0.5f,0.8f };
-		newp->set(300, { nowratioline + (float)startX,-30,-50 },
+		newp->set(360, { nowratioline + (float)startX,-30,-70 },
 			{ 0.0f,0.0f,0.4f },
 			{ 0,0,0 }, 1.5f, 1.5f);
 		particleList.push_back(std::move(newp));
