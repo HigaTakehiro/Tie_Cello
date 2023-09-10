@@ -17,17 +17,20 @@ void Cell::reverseCell()
 		return;
 	}
 
-	cellObject->setRotMatrix(0.0f, 0.0f, rotEasing.easing());
+	cellObject->setRotMatrix(rotEasing.easing(), 0.0f, 0.0f);
 
-	if (rotEasing.getIsActive())
+	if (!rotEasing.getIsActive())
 	{
+		rotEasing.reSet();
 		if (myType == cellType::white)
 		{
 			myType = cellType::black;
+			cellObject->setRotMatrix(135.0f, 0.0f, 0.0f);
 		}
 		else if (myType == cellType::black)
 		{
 			myType = cellType::white;
+			cellObject->setRotMatrix(0.0f, 0.0f, 0.0f);
 		}
 		isReverse = false;
 	}
@@ -80,7 +83,7 @@ void Cell::updata()
 		cellObject->SetPosition(
 			{
 				playerPointBlockPos.x,
-				playerPointBlockPos.y + 10, 
+				playerPointBlockPos.y + 5,
 				playerPointBlockPos.z
 			}
 		);
@@ -97,8 +100,17 @@ void Cell::setReverce()
 	{
 		return;
 	}
-	rotEasing.set(easingType::easeOut, easingPattern::Quadratic, 40,
-		cellObject->getRotation().z, cellObject->getRotation().z + 180);
+
+	if (myType == cellType::white)
+	{
+		rotEasing.set(easingType::easeOut, easingPattern::Quadratic, 30,
+			0.0f, 180.0f);
+	}
+	else if (myType == cellType::black)
+	{
+		rotEasing.set(easingType::easeOut, easingPattern::Quadratic, 30,
+			180.0f, 0.0f);
+	}
 
 	isReverse = true;
 }

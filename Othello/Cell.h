@@ -62,6 +62,8 @@ public:
 
 	void setIndex(int id) { index = id; }
 
+	int getIndex() { return index; }
+
 private:
 	static directX* dx;
 	//モデルデータ

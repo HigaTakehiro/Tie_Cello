@@ -37,6 +37,9 @@ private: //メンバ変数
 	std::vector<std::unique_ptr<Cell>> cellList;
 	std::vector<std::unique_ptr<Block>> blockList;
 
+	//今の石
+	std::unique_ptr<Cell> nowPlayingCell;
+
 	//現在マウスで指している位置インデックス(場外＆穴の場合は-1)
 	int nowPlayerPointBlockIndex = -1;
 
@@ -62,6 +65,8 @@ private: //メンバ変数
 
 	int blackCellCount = 0;
 	int whiteCellCount = 0;
+
+	float cellPosY = -27.0f;
 
 public: //メンバ関数
 	static void setInput(dxinput* in) { input = in; }

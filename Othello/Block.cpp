@@ -32,7 +32,7 @@ void Block::init(blockType type, XMFLOAT3 position, int id)
 		//オブジェクト生成
 		blockObject = new object3dFBX;
 	}
-	
+
 	blockObject->initialize();
 
 	if (type == blockType::light)
@@ -64,10 +64,15 @@ void Block::draw3D()
 bool Block::isThisPlayerPoint(XMFLOAT2 mousepos)
 {
 	XMFLOAT2 thispos = blockObject->worldToScleen();
+	thispos =
+	{
+		thispos.x,
+		thispos.y - 10
+	};
 
 	float dis = sqrtf(powf(thispos.x - mousepos.x, 2) + powf(thispos.y - mousepos.y, 2));
 
-	if (dis <= 15.0f)
+	if (dis <= 30.0f)
 	{
 		return true;
 	}

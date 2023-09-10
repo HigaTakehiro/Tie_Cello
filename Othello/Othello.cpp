@@ -20,6 +20,7 @@ void Othello::Init()
 {
 	cell.reserve(static_cast<size_t>(width * height));
 	initCell.reserve(cell.size());
+	nowPlayingCell = std::make_unique<Cell>();
 }
 
 void Othello::updata(XMFLOAT3 mousepos)
@@ -28,23 +29,24 @@ void Othello::updata(XMFLOAT3 mousepos)
 
 	isNowPlayerPointBlock(mousepos);
 
-	if (nowPlayerPointBlockIndex != -1)
-	{
-		IsSkip(GetCell(nowPlayerPointBlockIndex));
-	}
-	else
-	{
-		IsSkip(Color::NONE);
-	}
-
 	for (std::unique_ptr<Block>& newblock : blockList)
 	{
+		if (newblock->getIndex() == nowPlayerPointBlockIndex)
+		{
+			Cell::playerBlockPosUpdata(newblock->getBlockPosition());
+		}
+
 		newblock->updata();
 	}
 
 	for (std::unique_ptr<Cell>& newcell : cellList)
 	{
 		newcell->updata();
+	}
+
+	if (nowPlayingCell)
+	{
+		nowPlayingCell->updata();
 	}
 
 	blackCellCount = 0;
@@ -73,6 +75,11 @@ void Othello::Draw()
 	for (std::unique_ptr<Cell>& newcell : cellList)
 	{
 		newcell->draw3D();
+	}
+
+	if (nowPlayingCell)
+	{
+		nowPlayingCell->draw3D();
 	}
 }
 
@@ -174,6 +181,44 @@ int Othello::Put(Color color)
 						index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
 						cell[index] = color;
 
+						for (std::unique_ptr<Block>& newblock : blockList)
+						{
+							if (newblock->getIndex() == nowPlayerPointBlockIndex)
+							{
+								//石を置く
+								if (cell[index] == WHITE)
+								{
+									nowPlayingCell->init(
+										{
+											newblock->getBlockPosition().x,
+											cellPosY,
+											newblock->getBlockPosition().z
+										},
+										cellType::white, true);
+									nowPlayingCell->setIndex(index);
+									cellList.push_back(std::move(nowPlayingCell));
+
+									nowPlayingCell = std::make_unique<Cell>();
+									nowPlayingCell->init(newblock->getBlockPosition(), cellType::black, false);
+								}
+								else if (cell[index] == BLACK)
+								{
+									nowPlayingCell->init(
+										{
+											newblock->getBlockPosition().x,
+											cellPosY,
+											newblock->getBlockPosition().z
+										},
+										cellType::black, true);
+									nowPlayingCell->setIndex(index);
+									cellList.push_back(std::move(nowPlayingCell));
+
+									nowPlayingCell = std::make_unique<Cell>();
+									nowPlayingCell->init(newblock->getBlockPosition(), cellType::white, false);
+								}
+							}
+						}
+
 						//ひっくり返した枚数
 						count += s;
 
@@ -182,7 +227,15 @@ int Othello::Put(Color color)
 						{
 							//ひっくり返すマスのインデックスをセット
 							index += i * width + j;
+
 							//ひっくり返す(色を変える)
+							for (std::unique_ptr<Cell>& newcell : cellList)
+							{
+								if (newcell->getIndex() == index)
+								{
+									newcell->setReverce();
+								}
+							}
 							cell[index] = color;
 						}
 
@@ -449,12 +502,12 @@ int Othello::Load(const std::string& filePath)
 			blockList.push_back(std::move(newblock));
 		}
 
-		float cellPosY = -27.0f;
+		//新しい石
+		std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
 
 		//石を置く
 		if (cell[i] == WHITE)
 		{
-			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
 			newcell->init(
 				{
 					blockList[i]->getBlockPosition().x,
@@ -467,7 +520,6 @@ int Othello::Load(const std::string& filePath)
 		}
 		else if (cell[i] == BLACK)
 		{
-			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
 			newcell->init(
 				{
 					blockList[i]->getBlockPosition().x,
@@ -478,6 +530,17 @@ int Othello::Load(const std::string& filePath)
 			newcell->setIndex(i);
 			cellList.push_back(std::move(newcell));
 		}
+	}
+
+	Cell::playerBlockPosUpdata(blockList[0]->getBlockPosition());
+
+	if (GetStartColor() == BLACK)
+	{
+		nowPlayingCell->init(blockList[0]->getBlockPosition(), cellType::black, false);
+	}
+	else if (GetStartColor() == WHITE)
+	{
+		nowPlayingCell->init(blockList[0]->getBlockPosition(), cellType::white, false);
 	}
 
 	initCell = cell;
