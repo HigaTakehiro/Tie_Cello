@@ -40,7 +40,7 @@ private:
 	//‰‰o—pƒJƒƒ‰
 	std::unique_ptr<Camera> stagingCamera;
 
-	std::unique_ptr<EvenlyStaging> test;
+	std::unique_ptr<EvenlyStaging> evenry;
 
 	std::unique_ptr<Othello> othello;
 

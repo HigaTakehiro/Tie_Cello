@@ -16,10 +16,25 @@ public:
 	/// </summary>
 	/// <param name="now">現在の割合(0～1)</param>
 	/// <param name="clear">クリア条件の割合(0～1)</param>
-	static void ratioSet(float now, float clear)
+	static void ratioSet(float clear)
 	{
-		nowRatio = now;
 		clearRatio = clear;
+
+		int totalCell = whiteCount + blackCount;
+
+		if (whiteCount == 0 && blackCount == 0)
+		{
+			nowRatio = 0.5f;
+			return;
+		}
+
+		nowRatio = (float)(whiteCount / (float)totalCell);
+	}
+
+	static void setWhiteBlackCount(int wcount, int bcount)
+	{
+		whiteCount = wcount;
+		blackCount = bcount;
 	}
 
 	void updata(bool isWhite);
@@ -42,11 +57,13 @@ private:
 	static float nowRatio;		//現在の白黒の割合
 	static float clearRatio;	//クリア条件の白黒の割合
 	static bool isWhite;		//白の手番かどうか
+	static int whiteCount;		//白の数
+	static int blackCount;		//黒の数
 
 	SingleSprite clearLine;
 	SingleSprite nowLine;
 	SingleSprite whiteBack;
 	SingleSprite blackBack;
 
-
+	std::list<std::unique_ptr<SingleParticle>> particleList;
 };

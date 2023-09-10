@@ -77,7 +77,7 @@ void Othello::Draw()
 		newcell->draw3D();
 	}
 
-	if (nowPlayingCell)
+	if (nowPlayingCell && nowPlayerPointBlockIndex != -1)
 	{
 		nowPlayingCell->draw3D();
 	}

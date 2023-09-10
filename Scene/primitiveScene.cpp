@@ -58,6 +58,7 @@ void primitiveScene::setStaticData(directX* Directx, dxinput* Input, Audio* Audi
 	object3dFBX::CreateGraphicsPipelineSimple();
 
 	//パーティクルの共通カメラを設定
+	SingleParticle::setCamera(camera);
 
 	//マウスカーソル非表示
 	//ShowCursor(false);

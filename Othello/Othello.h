@@ -112,6 +112,7 @@ public: //メンバ関数
 	size_t GetSize() const { return cell.size(); }
 	Color GetCell(const size_t& index) const;
 	Color GetStartColor() const;
+	Color getNowColor() { return nowColor; }
 	int getBlackCount() { return blackCellCount; }
 	int getWhiteCount() { return whiteCellCount; }
 };

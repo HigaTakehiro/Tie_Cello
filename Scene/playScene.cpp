@@ -18,8 +18,8 @@ playScene::~playScene()
 
 void playScene::loadResources()
 {
-	test = std::make_unique<EvenlyStaging>();
-	test->init();
+	evenry = std::make_unique<EvenlyStaging>();
+	evenry->init();
 }
 
 void playScene::initialize()
@@ -45,16 +45,7 @@ void playScene::updata()
 	//ライト更新
 	light->Update();
 
-	if (input->Triger(DIK_RIGHT))
-	{
-		white++;
-	}
-	if (input->Triger(DIK_LEFT))
-	{
-		black++;
-	}
-
-	float nowratio;
+	/*float nowratio;
 
 	if (white == 0 && black == 0)
 	{
@@ -63,11 +54,19 @@ void playScene::updata()
 	else
 	{
 		nowratio = (float)white / (float)(white + black);
+	}*/
+
+	EvenlyStaging::setWhiteBlackCount(othello->getWhiteCount(), othello->getBlackCount());
+	EvenlyStaging::ratioSet(0.3f);
+
+	if (othello->getNowColor() == Color::WHITE)
+	{
+		evenry->updata(true);
 	}
-
-	EvenlyStaging::ratioSet(nowratio, 0.3f);
-
-	test->updata(false);
+	else
+	{
+		evenry->updata(false);
+	}
 
 	othello->updata(input->mousePosition);
 
@@ -81,11 +80,12 @@ void playScene::updata()
 void playScene::drawBack()
 {
 	sample_back->drawSprite(directx->cmdList.Get());
-	test->draw2D();
+	evenry->draw2D();
 }
 
 void playScene::draw3D()
 {
+	evenry->draw3D();
 	othello->Draw();
 }
 

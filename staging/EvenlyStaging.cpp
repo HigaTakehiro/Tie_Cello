@@ -1,14 +1,19 @@
 #include "EvenlyStaging.h"
 #include"../Base/WindowGenerate.h"
+#include<random>
 PostEffect* EvenlyStaging::post = nullptr;
 directX* EvenlyStaging::dx = nullptr;
 float EvenlyStaging::clearRatio = 0;
 float EvenlyStaging::nowRatio = 0;
+bool EvenlyStaging::isWhite = false;
+int EvenlyStaging::whiteCount = 0;
+int EvenlyStaging::blackCount = 0;
 
 void EvenlyStaging::setstaticdata(PostEffect* p, directX* d)
 {
 	post = p;
 	dx = d;
+	SingleParticle::loadTexInMap("enemyWaveBar.png");
 }
 
 void EvenlyStaging::init()
@@ -33,10 +38,22 @@ void EvenlyStaging::updata(bool isWhite)
 {
 	changeBackSprite();
 
+	setParticle();
+
 	clearLine.spriteUpdata();
 	nowLine.spriteUpdata();
 	whiteBack.spriteUpdata();
 	blackBack.spriteUpdata();
+
+	particleList.remove_if([](std::unique_ptr<SingleParticle>& newset)
+		{
+			return newset->getIsActive() == false;
+		});
+
+	for (std::unique_ptr<SingleParticle>& newp : particleList)
+	{
+		newp->updata();
+	}
 }
 
 void EvenlyStaging::changeBackSprite()
@@ -60,6 +77,56 @@ void EvenlyStaging::changeBackSprite()
 
 void EvenlyStaging::setParticle()
 {
+	std::unique_ptr<SingleParticle> newp = std::make_unique<SingleParticle>();
+
+	std::random_device seed;
+	std::mt19937 rnd(seed());
+	std::uint32_t Result = rnd();
+
+	int lange = 260;
+
+	float nowratioline = nowRatio * lange;
+
+	if (isWhite)
+	{
+		float leftlimittonowratioline = nowratioline - (-130);
+		int startX;
+		if (leftlimittonowratioline != 0)
+		{
+			startX = Result % (int)(leftlimittonowratioline);
+		}
+		else
+		{
+			startX = Result % 130;
+		}
+
+		newp->generate();
+		newp->color = { 0.5f,0.5f,0.5f,0.8f };
+		newp->set(300, { -130 + (float)startX,-30,-50 },
+			{ 0.0f,0.0f,0.4f },
+			{ 0,0,0 }, 1.5f, 1.5f);
+		particleList.push_back(std::move(newp));
+	}
+	else
+	{
+		float nowratiolinetorightlimit = 130 - nowratioline;
+		int startX;
+		if (nowratiolinetorightlimit != 0)
+		{
+			startX = Result % (int)(nowratiolinetorightlimit);
+		}
+		else
+		{
+			startX = Result % 130;
+		}
+
+		newp->generate();
+		newp->color = { 0.5f,0.5f,0.5f,0.8f };
+		newp->set(300, { nowratioline + (float)startX,-30,-50 },
+			{ 0.0f,0.0f,0.4f },
+			{ 0,0,0 }, 1.5f, 1.5f);
+		particleList.push_back(std::move(newp));
+	}
 }
 
 void EvenlyStaging::reSetBuffer()
@@ -69,6 +136,12 @@ void EvenlyStaging::reSetBuffer()
 
 void EvenlyStaging::draw3D()
 {
+	for (std::unique_ptr<SingleParticle>& newp : particleList)
+	{
+		newp->drawSpecifyTex("enemyWaveBar.png");
+	}
+
+	post->depthClear(dx->cmdList.Get());
 }
 
 void EvenlyStaging::draw2D()
