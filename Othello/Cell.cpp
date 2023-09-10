@@ -115,6 +115,20 @@ void Cell::setReverce()
 	isReverse = true;
 }
 
+void Cell::changeColor()
+{
+	if (myType == cellType::white)
+	{
+		cellObject->setRotMatrix(135.0f, 0.0f, 0.0f);
+		myType = cellType::black;
+	}
+	else if (myType == cellType::black)
+	{
+		cellObject->setRotMatrix(0.0f, 0.0f, 0.0f);
+		myType = cellType::white;
+	}
+}
+
 void Cell::draw3D()
 {
 	cellObject->Draw(dx->cmdList.Get());

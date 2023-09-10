@@ -54,6 +54,11 @@ public:
 	void setReverce();
 
 	/// <summary>
+	/// F•ÏX
+	/// </summary>
+	void changeColor();
+
+	/// <summary>
 	/// •`‰æ
 	/// </summary>
 	void draw3D();
@@ -63,6 +68,8 @@ public:
 	void setIndex(int id) { index = id; }
 
 	int getIndex() { return index; }
+
+	cellType getColor() { return myType; }
 
 private:
 	static directX* dx;

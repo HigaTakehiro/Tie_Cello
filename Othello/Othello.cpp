@@ -16,6 +16,12 @@ Othello::Othello() :
 	blockList.clear();
 }
 
+Othello::~Othello()
+{
+	cellList.clear();
+	blockList.clear();
+}
+
 void Othello::Init()
 {
 	cell.reserve(static_cast<size_t>(width * height));
@@ -46,6 +52,20 @@ void Othello::updata(XMFLOAT3 mousepos)
 
 	if (nowPlayingCell)
 	{
+		if (nowColor == Color::WHITE)
+		{
+			if (nowPlayingCell->getColor() == cellType::black)
+			{
+				nowPlayingCell->changeColor();
+			}
+		}
+		else if (nowColor == Color::BLACK)
+		{
+			if (nowPlayingCell->getColor() == cellType::white)
+			{
+				nowPlayingCell->changeColor();
+			}
+		}
 		nowPlayingCell->updata();
 	}
 
