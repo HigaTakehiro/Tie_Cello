@@ -36,7 +36,7 @@ void playScene::setParameter()
 	Othello::setInput(input);
 	othello = std::make_unique<Othello>();
 	othello->Init();
-	othello->Load("Resources/StageData/tutorial.csv");
+	othello->Load("Resources/StageData/stage02_HIGA.csv");
 	isNextScene = false;
 }
 

@@ -486,33 +486,35 @@ int Othello::Load(const std::string& filePath)
 		int x = i % width;
 		int z = i / width;
 
-		//ブロックを置く
-		if (cell[i] != HOLE || cell[i] != NONE)
+		if (cell[i] == HOLE || cell[i] == NONE)
 		{
-			blockType type = blockType(i % 2);
-
-			std::unique_ptr<Block> newblock = std::make_unique<Block>();
-			newblock->init(type,
-				{
-					blockDrawOffsetX + ((float)x * blockDistance),
-					-30.0f,
-					blockDrawOffsetZ - ((float)z * blockDistance)
-				}, i);
-
-			blockList.push_back(std::move(newblock));
+			continue;
 		}
 
-		//新しい石
-		std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
+		//ブロックを置く
+		blockType type = blockType(i % 2);
 
+		std::unique_ptr<Block> newblock = std::make_unique<Block>();
+		newblock->init(type,
+			{
+				blockDrawOffsetX + ((float)x * blockDistance),
+				-30.0f,
+				blockDrawOffsetZ - ((float)z * blockDistance)
+			}, i);
+
+		blockList.push_back(std::move(newblock));
+
+		
 		//石を置く
 		if (cell[i] == WHITE)
 		{
+			//新しい石
+			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
 			newcell->init(
 				{
-					blockList[i]->getBlockPosition().x,
+					blockList.back()->getBlockPosition().x,
 					cellPosY,
-					blockList[i]->getBlockPosition().z
+					blockList.back()->getBlockPosition().z
 				},
 				cellType::white, true);
 			newcell->setIndex(i);
@@ -520,11 +522,13 @@ int Othello::Load(const std::string& filePath)
 		}
 		else if (cell[i] == BLACK)
 		{
+			//新しい石
+			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
 			newcell->init(
 				{
-					blockList[i]->getBlockPosition().x,
+					blockList.back()->getBlockPosition().x,
 					cellPosY,
-					blockList[i]->getBlockPosition().z
+					blockList.back()->getBlockPosition().z
 				},
 				cellType::black, true);
 			newcell->setIndex(i);

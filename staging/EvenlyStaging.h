@@ -37,7 +37,7 @@ public:
 		blackCount = bcount;
 	}
 
-	void updata(bool isWhite);
+	void updata(bool iswhite);
 
 	static void reSetBuffer();
 
@@ -56,10 +56,10 @@ private:
 	static directX* dx;			//•`‰æˆ——p
 	static float nowRatio;		//Œ»İ‚Ì”’•‚ÌŠ„‡
 	static float clearRatio;	//ƒNƒŠƒAğŒ‚Ì”’•‚ÌŠ„‡
-	static bool isWhite;		//”’‚Ìè”Ô‚©‚Ç‚¤‚©
 	static int whiteCount;		//”’‚Ì”
 	static int blackCount;		//•‚Ì”
 
+	bool isWhite;				//”’‚Ìè”Ô‚©‚Ç‚¤‚©
 	SingleSprite clearLine;
 	SingleSprite nowLine;
 	SingleSprite whiteBack;
