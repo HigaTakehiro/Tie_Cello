@@ -72,7 +72,7 @@ public: //メンバ関数
 	static void setInput(dxinput* in) { input = in; }
 
 	Othello();
-	~Othello() {}
+	~Othello();
 
 	// 初期化
 	void Init();
