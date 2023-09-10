@@ -64,10 +64,11 @@ void Cell::init(XMFLOAT3 pos, cellType type, bool put)
 
 	if (type == cellType::black)
 	{
-		cellObject->setRotMatrix(180.0f, 0.0f, 0.0f);
+		cellObject->setRotMatrix(135.0f, 0.0f, 0.0f);
 	}
 
-	cellObject->SetScale({ 1,1,1 });
+	cellObject->SetPosition(pos);
+	cellObject->SetScale({ 0.015f,0.015f,0.015f });
 
 	isPut = put;
 }
@@ -79,7 +80,7 @@ void Cell::updata()
 		cellObject->SetPosition(
 			{
 				playerPointBlockPos.x,
-				playerPointBlockPos.y + 10,
+				playerPointBlockPos.y + 10, 
 				playerPointBlockPos.z
 			}
 		);

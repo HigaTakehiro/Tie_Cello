@@ -41,11 +41,11 @@ private: //メンバ変数
 	int nowPlayerPointBlockIndex = -1;
 
 	//描画オフセット
-	float drawOffsetX;
-	float drawOffsetZ;
+	float blockDrawOffsetX;
+	float blockDrawOffsetZ;
 
 	//1ブロックの幅
-	const float blockDistance = 10.0f;
+	const float blockDistance = 15.0f;
 
 	//終了フラグ
 	bool isFinish = false;

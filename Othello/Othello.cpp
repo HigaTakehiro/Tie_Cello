@@ -42,6 +42,11 @@ void Othello::updata(XMFLOAT3 mousepos)
 		newblock->updata();
 	}
 
+	for (std::unique_ptr<Cell>& newcell : cellList)
+	{
+		newcell->updata();
+	}
+
 	blackCellCount = 0;
 	whiteCellCount = 0;
 
@@ -63,6 +68,11 @@ void Othello::Draw()
 	for (std::unique_ptr<Block>& newblock : blockList)
 	{
 		newblock->draw3D();
+	}
+
+	for (std::unique_ptr<Cell>& newcell : cellList)
+	{
+		newcell->draw3D();
 	}
 }
 
@@ -415,28 +425,58 @@ int Othello::Load(const std::string& filePath)
 		cell.push_back(static_cast<Color>(cellArray[i]));
 	}
 
-	drawOffsetX = (0 - (width / 2)) * blockDistance;
-	drawOffsetZ = (0 + (height / 2)) * blockDistance;
+	blockDrawOffsetX = ((0.0f - ((float)width / 2)) * blockDistance) + blockDistance / 2;
+	blockDrawOffsetZ = ((0.0f + ((float)height / 2)) * blockDistance) - blockDistance / 2;
 
 	for (int i = 0; i < cell.size(); i++)
 	{
 		int x = i % width;
 		int z = i / width;
 
+		//ブロックを置く
 		if (cell[i] != HOLE || cell[i] != NONE)
 		{
-			std::unique_ptr<Block> newblock = std::unique_ptr<Block>();
-
 			blockType type = blockType(i % 2);
 
+			std::unique_ptr<Block> newblock = std::make_unique<Block>();
 			newblock->init(type,
 				{
-					drawOffsetX + ((float)x * blockDistance),
-					0.0f,
-					drawOffsetZ - ((float)z * blockDistance)
+					blockDrawOffsetX + ((float)x * blockDistance),
+					-30.0f,
+					blockDrawOffsetZ - ((float)z * blockDistance)
 				}, i);
 
 			blockList.push_back(std::move(newblock));
+		}
+
+		float cellPosY = -27.0f;
+
+		//石を置く
+		if (cell[i] == WHITE)
+		{
+			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
+			newcell->init(
+				{
+					blockList[i]->getBlockPosition().x,
+					cellPosY,
+					blockList[i]->getBlockPosition().z
+				},
+				cellType::white, true);
+			newcell->setIndex(i);
+			cellList.push_back(std::move(newcell));
+		}
+		else if (cell[i] == BLACK)
+		{
+			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
+			newcell->init(
+				{
+					blockList[i]->getBlockPosition().x,
+					cellPosY,
+					blockList[i]->getBlockPosition().z
+				},
+				cellType::black, true);
+			newcell->setIndex(i);
+			cellList.push_back(std::move(newcell));
 		}
 	}
 

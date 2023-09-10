@@ -27,8 +27,12 @@ void Block::setStaticData(directX* d)
 
 void Block::init(blockType type, XMFLOAT3 position, int id)
 {
-	//オブジェクト生成
-	blockObject = new object3dFBX;
+	if (blockObject == nullptr)
+	{
+		//オブジェクト生成
+		blockObject = new object3dFBX;
+	}
+	
 	blockObject->initialize();
 
 	if (type == blockType::light)
@@ -42,7 +46,7 @@ void Block::init(blockType type, XMFLOAT3 position, int id)
 
 	startPos = position;
 	blockObject->SetPosition(position);
-	blockObject->SetScale({ 1,1,1 });
+	blockObject->SetScale({ 0.024f,0.024f,0.024f });
 
 	index = id;
 }

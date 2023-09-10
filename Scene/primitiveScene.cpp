@@ -45,10 +45,10 @@ void primitiveScene::setStaticData(directX* Directx, dxinput* Input, Audio* Audi
 	light->SetLightDir({ 0,-1,0,0 });
 
 	camera = new Camera();
-	camera->SetEye({ 0.0f,10.0f,-30.0f });
-	camera->SetTarget({ 0.0f,0.0f,0.0f });
-	camera->UpdateProjectionMatrix();
-	camera->UpdateViewMatrix();
+	camera->SetEye({ 0.0f,100.0f,-10.0f });
+	camera->SetTarget({ 0.0f,-30.0f,0.0f });
+	camera->SetUp({ 0,0.01f,0.01f });
+	camera->Update();
 
 	//3dオブジェクト生成
 	object3dFBX::setLight(light);
