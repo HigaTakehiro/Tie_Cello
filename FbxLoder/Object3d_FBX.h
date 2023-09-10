@@ -121,6 +121,7 @@ public:
 
 	void setRotMatrix(float rotZ, float rotX, float rotY)
 	{
+		mRot = XMMatrixIdentity();
 		mRot *= XMMatrixRotationZ(rotZ);
 		mRot *= XMMatrixRotationX(rotX);
 		mRot *= XMMatrixRotationY(rotY);

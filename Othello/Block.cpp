@@ -10,15 +10,29 @@ void Block::loadResources()
 	blockModel_2.reset(FbxLoader::GetInstance()->LoadmodelFromFile("Board_2"));
 }
 
+Block::Block()
+{
+}
+
+Block::~Block()
+{
+	delete(blockObject);
+}
+
 void Block::setStaticData(directX* d)
 {
 	dx = d;
 	loadResources();
 }
 
-void Block::init(blockType type, XMFLOAT3 position)
+void Block::init(blockType type, XMFLOAT3 position, int id)
 {
-	blockObject = std::make_unique<object3dFBX>();
+	if (blockObject == nullptr)
+	{
+		//オブジェクト生成
+		blockObject = new object3dFBX;
+	}
+
 	blockObject->initialize();
 
 	if (type == blockType::light)
@@ -32,7 +46,9 @@ void Block::init(blockType type, XMFLOAT3 position)
 
 	startPos = position;
 	blockObject->SetPosition(position);
-	blockObject->SetScale({ 1,1,1 });
+	blockObject->SetScale({ 0.024f,0.024f,0.024f });
+
+	index = id;
 }
 
 void Block::updata()
@@ -43,4 +59,23 @@ void Block::updata()
 void Block::draw3D()
 {
 	blockObject->Draw(dx->cmdList.Get());
+}
+
+bool Block::isThisPlayerPoint(XMFLOAT2 mousepos)
+{
+	XMFLOAT2 thispos = blockObject->worldToScleen();
+	thispos =
+	{
+		thispos.x,
+		thispos.y - 10
+	};
+
+	float dis = sqrtf(powf(thispos.x - mousepos.x, 2) + powf(thispos.y - mousepos.y, 2));
+
+	if (dis <= 30.0f)
+	{
+		return true;
+	}
+
+	return false;
 }

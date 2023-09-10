@@ -74,6 +74,8 @@ public:
 	static std::unique_ptr<SingleSprite> sample_back;
 	//ライト
 	static Light* light;
+	//カメラ
+	static Camera* camera;
 	//ステージ番号
 	static int stageNum;
 	//最大ステージ番号

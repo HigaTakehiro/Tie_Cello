@@ -23,6 +23,9 @@ private:
 	void reverseCell();
 
 public:
+	Cell();
+	~Cell();
+
 	/// <summary>
 	/// 静的データセット
 	/// </summary>
@@ -38,7 +41,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void init(cellType type);
+	void init(XMFLOAT3 pos, cellType type, bool put);
 
 	/// <summary>
 	/// 更新
@@ -46,11 +49,20 @@ public:
 	void updata();
 
 	/// <summary>
+	/// ひっくり返す準備
+	/// </summary>
+	void setReverce();
+
+	/// <summary>
 	/// 描画
 	/// </summary>
 	void draw3D();
 
 	bool getIsPut() { return isPut; }
+
+	void setIndex(int id) { index = id; }
+
+	int getIndex() { return index; }
 
 private:
 	static directX* dx;
@@ -62,7 +74,7 @@ private:
 	static bool isMove;
 
 	//オブジェクト
-	std::unique_ptr<object3dFBX> cellObject;
+	object3dFBX* cellObject = nullptr;
 	//イージング
 	easingManager rotEasing;
 	//ウラ・オモテ
@@ -71,4 +83,6 @@ private:
 	bool isPut = false;
 	//ひっくり返している途中かどうか
 	bool isReverse = false;
+	//マップ全体で何番目のインデックスかどうか(初期値-1)
+	int index = -1;
 };

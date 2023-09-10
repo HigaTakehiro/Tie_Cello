@@ -18,6 +18,9 @@ private:
 	static void loadResources();
 
 public:
+	Block();
+	~Block();
+
 	/// <summary>
 	/// 静的データセット
 	/// </summary>
@@ -27,7 +30,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void init(blockType type, XMFLOAT3 position);
+	void init(blockType type, XMFLOAT3 position, int id);
 
 	/// <summary>
 	/// 更新
@@ -39,18 +42,45 @@ public:
 	/// </summary>
 	void draw3D();
 
+	/// <summary>
+	///	マウスが指しているブロックかどうか
+	/// </summary>
+	/// <param name="mousepos">マウス座標</param>
+	/// <returns>判定結果</returns>
+	bool isThisPlayerPoint(XMFLOAT2 mousepos);
+
+	/// <summary>
+	/// インデックスを取得
+	/// </summary>
+	/// <returns>インデックス</returns>
+	int getIndex() { return index; }
+
+	/// <summary>
+	/// ブロックの座標を取得
+	/// </summary>
+	XMFLOAT3 getBlockPosition() { return blockObject->getPosition(); }
+
 private:
+	//dierctx
 	static directX* dx;
+
 	//モデルデータ
 	static std::unique_ptr<Model> blockModel_1;
 	static std::unique_ptr<Model> blockModel_2;
 
+public:
 	//オブジェクト
-	std::unique_ptr<object3dFBX> blockObject;
+	object3dFBX* blockObject = nullptr;
+
 	//イージング
 	easingManager startEasing;
+
 	//初期位置
 	XMFLOAT3 startPos;
+
 	//終端位置
 	XMFLOAT3 endPos;
+
+	//マップ全体で何番目のインデックスかどうか(初期値-1)
+	int index = -1;
 };

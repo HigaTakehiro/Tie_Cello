@@ -2,6 +2,9 @@
 #include <vector>
 #include <string>
 #include"../FbxLoder/Object3d_FBX.h"
+#include"Cell.h"
+#include"Block.h"
+#include"../Input/dxInput.h"
 
 enum Color
 {
@@ -17,30 +20,86 @@ class Othello
 public:
 	static const int circleSize = 90;
 
+	static dxinput* input;
+
 private: //メンバ変数
+
+	//マップデータ
 	std::vector<Color> cell;
 	std::vector<Color> initCell;
+
 	int width;  //幅
 	int height; //高さ
+
 	bool startColor; //開始時の色
 
+	//石とブロックのリスト
+	std::vector<std::unique_ptr<Cell>> cellList;
+	std::vector<std::unique_ptr<Block>> blockList;
+
+	//今の石
+	std::unique_ptr<Cell> nowPlayingCell;
+
+	//現在マウスで指している位置インデックス(場外＆穴の場合は-1)
+	int nowPlayerPointBlockIndex = -1;
+
+	//描画オフセット
+	float blockDrawOffsetX;
+	float blockDrawOffsetZ;
+
+	//1ブロックの幅
+	const float blockDistance = 15.0f;
+
+	//終了フラグ
+	bool isFinish = false;
+
+	//スキップフラグ
+	bool isSkip = false;
+
+	//現在選択しているインデックスの横幅・縦幅
+	int nowPlayerPointBlockX = 0;
+	int nowPlayerPointBlockZ = 0;
+
+	//現在の色
+	Color nowColor = Color::BLACK;
+
+	int blackCellCount = 0;
+	int whiteCellCount = 0;
+
+	float cellPosY = -27.0f;
+
 public: //メンバ関数
+	static void setInput(dxinput* in) { input = in; }
+
 	Othello();
 	~Othello() {}
 
 	// 初期化
 	void Init();
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// /// <param name="mousepos">マウス座標</param>
+	void updata(XMFLOAT3 mousepos);
+
 	/// <summary>
 	/// 描画
 	/// </summary>
-	/// <param name="offsetX">全体のオフセット</param>
-	/// <param name="offsetY">全体のオフセット</param>
-	void Draw(int offsetX = 0, int offsetY = 0);
+	void Draw();
+
 	// リセット
 	void Reset();
 
 	// 石を置く
-	int Put(int x, int y, Color color);
+	int Put(Color color);
+
+	//どのブロックをマウスで指しているか判定
+	void isNowPlayerPointBlock(XMFLOAT3 mousepos);
+
+	//プレイヤー入力
+	void playerInput();
+
 	// ステージ読み込み
 	int Load(const std::string& filePath);
 
@@ -53,4 +112,7 @@ public: //メンバ関数
 	size_t GetSize() const { return cell.size(); }
 	Color GetCell(const size_t& index) const;
 	Color GetStartColor() const;
+	Color getNowColor() { return nowColor; }
+	int getBlackCount() { return blackCellCount; }
+	int getWhiteCount() { return whiteCellCount; }
 };
