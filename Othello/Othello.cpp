@@ -25,7 +25,7 @@ Othello::~Othello()
 void Othello::Init()
 {
 	cell.reserve(static_cast<size_t>(width * height));
-	initCell.reserve(cell.size());
+	initCell.reserve(cell.capacity());
 	nowPlayingCell = std::make_unique<Cell>();
 }
 

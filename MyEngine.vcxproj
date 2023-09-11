@@ -47,11 +47,13 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)DirectXTex\include</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)DirectXTex\lib\$(Configuration)</LibraryPath>
+    <TargetName>4006_Tiethello</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)DirectXTex\include</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)DirectXTex\lib\$(Configuration)</LibraryPath>
+    <TargetName>4006_Tiethello</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
