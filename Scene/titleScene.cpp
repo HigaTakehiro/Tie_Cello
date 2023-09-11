@@ -74,6 +74,7 @@ void titleScene::loadResources()
 		}
 		titleChars[i].texLeftTop = { (i % 2) * titleChars[i].texSize.x, texY * titleChars[i].texSize.y };
 		titleChars[i].generateSprite("TitleChars.png", false, false, false, true);
+		titleChars[i].spriteUpdata(true);
 	}
 	//タイトル
 
@@ -104,12 +105,6 @@ void titleScene::updata()
 	
 	//マウス座標更新
 	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y,0.0f };
-
-	titleBack.spriteUpdata();
-	for (auto& i : titleChars)
-	{
-		i.spriteUpdata(true);
-	}
 
 	//次のシーンへの移行条件
 	if (input->Triger(DIK_SPACE))

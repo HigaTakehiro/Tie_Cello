@@ -1,5 +1,6 @@
 #pragma once
 #include"primitiveScene.h"
+#include <array>
 
 class selectScene
 	:public primitiveScene
@@ -39,14 +40,13 @@ private:
 	
 	//背景
 	SingleSprite selectBack;
-	//ステージアイコン
-	
-	//セレクトアイコン
-	
-	//プレイスタートボタン
-	
-	
-	//ステージアイコンのイージング
+	// 数字
+	std::array<SingleSprite, 2> number;
+
+	// ステージの数
+	const int stageCount = 4;
+	// 選択中のステージ
+	int nowStageNumber = 1;
 	
 	//ステージアイコンを動かしているかどうか
 	bool isMoveStageIcon = false;
