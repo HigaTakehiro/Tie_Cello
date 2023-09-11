@@ -13,7 +13,7 @@ playScene::playScene()
 
 playScene::~playScene()
 {
-
+	othello->~Othello();
 }
 
 void playScene::loadResources()
