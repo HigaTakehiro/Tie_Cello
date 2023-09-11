@@ -23,7 +23,7 @@ void titleScene::loadResources()
 	titleBack.generateSprite("Tiethello_background_tentative.png");
 
 	const size_t charCount = titleChars.size() / 2;
-	const XMFLOAT3 offset = { 100.0f, 100.0f, 0 };
+	const XMFLOAT3 offset = { 32.0f, 100.0f, 0 };
 	for (int i = 0; i < titleChars.size(); i++)
 	{
 		titleChars[i].size = { 192.0f, 192.0f };
@@ -35,25 +35,41 @@ void titleScene::loadResources()
 		};
 
 		titleChars[i].texSize = { 256.0f, 256.0f };
-		//Tiethllo
+		//Tiethello
 		int texY = 0;
 		switch (i / 2)
 		{
-		case 3: //t
-			texY = 6;
+		// T
+		case 0:
+			texY = 0;
 			break;
-		case 4: //h
-			texY = 5;
+		// i
+		case 1:
+			texY = 1;
 			break;
-		case 5: //l
-		case 6:
-			texY = 4;
+		// e
+		case 2:
+		case 5:
+			texY = 2;
 			break;
-		case 7: //o
+		// o
+		case 8:
 			texY = 3;
 			break;
-		default: // T, i, e
-			texY = i / 2;
+		// l
+		case 6:
+		case 7:
+			texY = 4;
+			break;
+		// h
+		case 4:
+			texY = 5;
+			break;
+		// t
+		case 3:
+			texY = 6;
+			break;
+		default:
 			break;
 		}
 		titleChars[i].texLeftTop = { (i % 2) * titleChars[i].texSize.x, texY * titleChars[i].texSize.y };
