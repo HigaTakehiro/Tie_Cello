@@ -54,6 +54,9 @@ private: //メンバ変数
 	//描画オフセット
 	float blockDrawOffsetX;
 	float blockDrawOffsetZ;
+	XMFLOAT3 drawOffset;
+	// 描画スケール
+	XMFLOAT3 drawScale;
 
 	//1ブロックの幅
 	const float blockDistance = 15.0f;
@@ -81,13 +84,13 @@ public: //メンバ関数
 	~Othello();
 
 	// 初期化
-	void Init();
+	void Init(const XMFLOAT3& offset = {}, const XMFLOAT3& scale = {1.0f, 1.0f, 1.0f});
 
 	/// <summary>
 	/// 更新
 	/// </summary>
-	/// /// <param name="mousepos">マウス座標</param>
-	void updata(XMFLOAT3 mousepos);
+	/// <param name="mousepos">マウス座標</param>
+	void updata(const XMFLOAT3& mousepos);
 
 	/// <summary>
 	/// 描画
@@ -118,6 +121,7 @@ public: //メンバ関数
 	size_t GetSize() const { return cell.size(); }
 	Color GetCell(const size_t& index) const;
 	Color GetStartColor() const;
+
 	Color getNowColor() { return nowColor; }
 	int getBlackCount() { return blackCellCount; }
 	int getWhiteCount() { return whiteCellCount; }
@@ -137,4 +141,11 @@ public: //メンバ関数
 	{
 		return isFinish;
 	}
+
+	Color GetNowColor() { return nowColor; }
+	int GetBlackCount() { return blackCellCount; }
+	int GetWhiteCount() { return whiteCellCount; }
+	bool GetSkipFlag() const { return isSkip; }
+	bool GetFinishFlag() const { return isFinish; }
+
 };

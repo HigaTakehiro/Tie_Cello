@@ -57,7 +57,7 @@ void Cell::playerBlockPosUpdata(XMFLOAT3 blockPos)
 	playerPointBlockPos = blockPos;
 }
 
-void Cell::init(XMFLOAT3 pos, cellType type, bool put)
+void Cell::init(XMFLOAT3 pos, const XMFLOAT3& scale, cellType type, bool put)
 {
 	cellObject = new object3dFBX;
 	cellObject->initialize();
@@ -71,7 +71,8 @@ void Cell::init(XMFLOAT3 pos, cellType type, bool put)
 	}
 
 	cellObject->SetPosition(pos);
-	cellObject->SetScale({ 0.015f,0.015f,0.015f });
+	const XMFLOAT3 baseScale = { 0.015f,0.015f,0.015f };
+	cellObject->SetScale({ baseScale.x * scale.x, baseScale.y * scale.y, baseScale.z * scale.z });
 
 	isPut = put;
 }

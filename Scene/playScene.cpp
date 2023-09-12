@@ -2,10 +2,10 @@
 
 playScene::playScene()
 {
-	//���\�[�X�ǂݍ���
+	//リソース読み込み
 	loadResources();
 
-	//�p�����[�^�̃Z�b�g
+	//パラメータのセット
 	setParameter();
 
 	thisType = gameSceneType::play;
@@ -39,13 +39,17 @@ void playScene::setParameter()
 
 void playScene::updata()
 {
-	//���C�g�X�V
+	//ライト更新
 	light->Update();
 
+
 	EvenlyStaging::setWhiteBlackCount(othello->getWhiteCount(), othello->getBlackCount());
+
+	EvenlyStaging::setWhiteBlackCount(othello->GetWhiteCount(), othello->GetBlackCount());
+
 	EvenlyStaging::ratioSet(0.3f);
 
-	if (othello->getNowColor() == Color::WHITE)
+	if (othello->GetNowColor() == Color::WHITE)
 	{
 		evenry->setIsWhite(true);
 	}
@@ -57,7 +61,7 @@ void playScene::updata()
 
 	othello->updata(input->mousePosition);
 
-	//���̃V�[���ւ̈ڍs����
+	//次のシーンへの移行条件
 	if (othello->getIsFinish())
 	{
 		if (evenry->getIsClear())
@@ -69,7 +73,7 @@ void playScene::updata()
 			isClearOrOver = false;
 		}
 
-		//���̃V�[���ւ̉��o�����]�[��
+		//次のシーンへの演出準備ゾーン
 
 		isNextScene = true;
 	}
