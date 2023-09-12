@@ -14,6 +14,8 @@
 #include<time.h>
 #include<memory>
 #include<list>
+#include"../staging/EvenlyStaging.h"
+#include"../Othello/Othello.h"
 
 enum class gameSceneType
 {
@@ -88,4 +90,8 @@ public:
 	static bool isClearOrOver;
 	//タイトルかセレクトか(true:セレクト/false:タイトル)
 	static bool isSelectOrTitle;
+
+	//オセロとスコア背景
+	static std::unique_ptr<Othello> othello;
+	static std::unique_ptr<EvenlyStaging> evenry;
 };

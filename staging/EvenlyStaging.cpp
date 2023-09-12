@@ -55,6 +55,11 @@ void EvenlyStaging::updata(bool iswhite)
 	{
 		newp->updata();
 	}
+
+	if (nowRatio == clearRatio)
+	{
+		isClear = true;
+	}
 }
 
 void EvenlyStaging::changeBackSprite()

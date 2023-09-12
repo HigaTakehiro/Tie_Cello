@@ -1,7 +1,5 @@
 #pragma once
 #include "primitiveScene.h"
-#include"../staging/EvenlyStaging.h"
-#include"../Othello/Othello.h"
 
 class playScene
 	:public primitiveScene
@@ -40,10 +38,13 @@ private:
 	//‰‰o—pƒJƒƒ‰
 	std::unique_ptr<Camera> stagingCamera;
 
-	std::unique_ptr<EvenlyStaging> evenry;
+	//std::unique_ptr<EvenlyStaging> evenry;
 
-	std::unique_ptr<Othello> othello;
+	//std::unique_ptr<Othello> othello;
 
 	int white = 0;
 	int black = 0;
+
+	bool isFinished = false;
+	bool isClear = false;
 };

@@ -45,6 +45,8 @@ public:
 
 	void draw2D();
 
+	bool getIsClear() { return isClear; }
+
 private:
 
 	void changeBackSprite();
@@ -59,6 +61,7 @@ private:
 	static int whiteCount;		//”’‚Ì”
 	static int blackCount;		//•‚Ì”
 
+	bool isClear = false;
 	bool isWhite;				//”’‚Ìè”Ô‚©‚Ç‚¤‚©
 	SingleSprite clearLine;
 	SingleSprite nowLine;

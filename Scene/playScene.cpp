@@ -13,12 +13,11 @@ playScene::playScene()
 
 playScene::~playScene()
 {
-	othello->~Othello();
+	//othello->~Othello();
 }
 
 void playScene::loadResources()
 {
-	evenry = std::make_unique<EvenlyStaging>();
 	evenry->init();
 }
 
@@ -31,10 +30,7 @@ void playScene::initialize()
 
 void playScene::setParameter()
 {
-	Cell::setStaticData(directx);
-	Block::setStaticData(directx);
 	Othello::setInput(input);
-	othello = std::make_unique<Othello>();
 	othello->Init();
 	std::string num = std::to_string(Othello::GetLoadStageNumber());
 	othello->Load(("Resources/StageData/stage" + num + ".csv"));
@@ -45,17 +41,6 @@ void playScene::updata()
 {
 	//ライト更新
 	light->Update();
-
-	/*float nowratio;
-
-	if (white == 0 && black == 0)
-	{
-		nowratio = 0.5f;
-	}
-	else
-	{
-		nowratio = (float)white / (float)(white + black);
-	}*/
 
 	EvenlyStaging::setWhiteBlackCount(othello->getWhiteCount(), othello->getBlackCount());
 	EvenlyStaging::ratioSet(0.3f);
@@ -72,8 +57,17 @@ void playScene::updata()
 	othello->updata(input->mousePosition);
 
 	//次のシーンへの移行条件
-	if (input->Triger(DIK_SPACE))
+	if (othello->getIsFinish())
 	{
+		if (evenry->getIsClear())
+		{
+			isClearOrOver = true;
+		}
+		else
+		{
+			isClearOrOver = false;
+		}
+
 		isNextScene = true;
 	}
 }

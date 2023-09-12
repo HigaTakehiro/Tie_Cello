@@ -121,4 +121,20 @@ public: //メンバ関数
 	Color getNowColor() { return nowColor; }
 	int getBlackCount() { return blackCellCount; }
 	int getWhiteCount() { return whiteCellCount; }
+	bool isAllCellMoved()
+	{
+		bool ismove = false;
+		for (std::unique_ptr<Cell>& newcell : cellList)
+		{
+			if (newcell->getIsReverse())
+			{
+				ismove = true;
+			}
+		}
+		return ismove;
+	}
+	bool getIsFinish()
+	{
+		return isFinish;
+	}
 };
