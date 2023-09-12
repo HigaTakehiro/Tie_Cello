@@ -5,6 +5,7 @@
 #include "../File/LoadCSV.h"
 
 dxinput* Othello::input = nullptr;
+int Othello::loadStageNumber = 0;
 
 Othello::Othello() :
 	cell{},

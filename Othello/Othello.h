@@ -17,10 +17,18 @@ enum Color
 
 class Othello
 {
-public:
+public: //定数
 	static const int circleSize = 90;
 
+private: //静的メンバ変数
 	static dxinput* input;
+	static int loadStageNumber;
+
+public: //静的メンバ関数
+	static void setInput(dxinput* in) { input = in; }
+	static void SetLoadStageNumber(int num) { loadStageNumber = num; }
+
+	static int GetLoadStageNumber() { return loadStageNumber; }
 
 private: //メンバ変数
 
@@ -69,8 +77,6 @@ private: //メンバ変数
 	float cellPosY = -27.0f;
 
 public: //メンバ関数
-	static void setInput(dxinput* in) { input = in; }
-
 	Othello();
 	~Othello();
 
