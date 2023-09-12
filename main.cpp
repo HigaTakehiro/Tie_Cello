@@ -30,33 +30,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	directx.Init(Win);
 	directx.initializeDepth();
 
-#ifdef _DEBUG
-
-	ID3D12InfoQueue* infoQueue;
-	if (SUCCEEDED(directx.dev->QueryInterface(IID_PPV_ARGS(&infoQueue))))
-	{
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		infoQueue->Release();
-	}
-
-	D3D12_MESSAGE_ID denyIds[] =
-	{
-		D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
-	};
-
-	D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
-	D3D12_INFO_QUEUE_FILTER filter{};
-	filter.DenyList.NumIDs = _countof(denyIds);
-	filter.DenyList.pIDList = denyIds;
-	filter.DenyList.NumSeverities = _countof(severities);
-	filter.DenyList.pSeverityList = severities;
-
-	infoQueue->PushStorageFilter(&filter);
-
-#endif
-
-
 	FbxLoader::GetInstance()->Initilize(directx.dev.Get());
 
 	//音初期化
@@ -163,6 +136,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	delete posteffect;
 
 	primitiveScene::finalize();
+
+#ifdef _DEBUG
+
+	ID3D12InfoQueue* infoQueue;
+	if (SUCCEEDED(directx.dev->QueryInterface(IID_PPV_ARGS(&infoQueue))))
+	{
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->Release();
+	}
+
+	D3D12_MESSAGE_ID denyIds[] =
+	{
+		D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+	};
+
+	D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+	D3D12_INFO_QUEUE_FILTER filter{};
+	filter.DenyList.NumIDs = _countof(denyIds);
+	filter.DenyList.pIDList = denyIds;
+	filter.DenyList.NumSeverities = _countof(severities);
+	filter.DenyList.pSeverityList = severities;
+
+	infoQueue->PushStorageFilter(&filter);
+
+#endif
 
 	// ウィンドウクラスを登録解除
 	Win->Win_Deleate();

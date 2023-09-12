@@ -69,6 +69,8 @@ void playScene::updata()
 			isClearOrOver = false;
 		}
 
+		//次のシーンへの演出準備ゾーン
+
 		isNextScene = true;
 	}
 }
