@@ -47,12 +47,13 @@ void playScene::updata()
 
 	if (othello->getNowColor() == Color::WHITE)
 	{
-		evenry->updata(true);
+		evenry->setIsWhite(true);
 	}
 	else
 	{
-		evenry->updata(false);
+		evenry->setIsWhite(false);
 	}
+	evenry->updata();
 
 	othello->updata(input->mousePosition);
 
