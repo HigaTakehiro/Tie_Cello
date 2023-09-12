@@ -61,11 +61,12 @@ private: //メンバ変数
 	//1ブロックの幅
 	const float blockDistance = 15.0f;
 
-	//終了フラグ
-	bool isFinish = false;
-
 	//スキップフラグ
 	bool isSkip = false;
+	//終了フラグ
+	bool isFinish = false;
+	//引き分けフラグ
+	bool isTie = false;
 
 	//現在選択しているインデックスの横幅・縦幅
 	int nowPlayerPointBlockX = 0;
@@ -137,15 +138,12 @@ public: //メンバ関数
 		}
 		return ismove;
 	}
-	bool getIsFinish()
-	{
-		return isFinish;
-	}
 
 	Color GetNowColor() { return nowColor; }
 	int GetBlackCount() { return blackCellCount; }
 	int GetWhiteCount() { return whiteCellCount; }
 	bool GetSkipFlag() const { return isSkip; }
+	bool GetTieFlag() const { return isTie; }
 	bool GetFinishFlag() const { return isFinish; }
 
 };

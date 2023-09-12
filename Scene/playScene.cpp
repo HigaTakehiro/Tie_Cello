@@ -62,7 +62,7 @@ void playScene::updata()
 	othello->updata(input->mousePosition);
 
 	//次のシーンへの移行条件
-	if (othello->getIsFinish())
+	if (othello->GetFinishFlag())
 	{
 		if (evenry->getIsClear())
 		{
