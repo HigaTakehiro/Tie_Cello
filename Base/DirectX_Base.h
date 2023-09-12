@@ -52,6 +52,7 @@ public:
 
 	//コンストラクタ
 	directX();
+	~directX();
 
 	//初期化
 	void Init(Window_Generate* Win);
