@@ -54,13 +54,11 @@ void Othello::updata(const XMFLOAT3& mousepos)
 			Cell::playerBlockPosUpdata(newblock->getBlockPosition());
 		}
 
-		//newblock->setScale(scale);
 		newblock->updata();
 	}
 
 	for (std::unique_ptr<Cell>& newcell : cellList)
 	{
-		//newcell->setScale(scale);
 		newcell->updata();
 	}
 
@@ -380,7 +378,7 @@ bool Othello::IsSkip(Color color)
 				}
 
 				//マップの最大幅
-				const int size = 8;
+				const int size = (width > height) ? width : height;
 
 				//2マス先以降を判定
 				for (int s = 2; s < size; s++)
@@ -430,6 +428,7 @@ void Othello::playerInput()
 		if (isSkip && !isAllCellMoved())
 		{
 			isFinish = true;
+			isTie = blackCellCount == whiteCellCount;
 		}
 		else
 		{
@@ -532,7 +531,7 @@ int Othello::Load(const std::string& filePath)
 		}
 
 		//ブロックを置く
-		blockType type = blockType(i % 2);
+		blockType type = blockType((x + z) % 2);
 
 		std::unique_ptr<Block> newblock = std::make_unique<Block>();
 		XMFLOAT3 pos =

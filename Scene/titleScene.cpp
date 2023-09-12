@@ -27,7 +27,7 @@ void titleScene::loadResources()
 	for (int i = 0; i < titleChars.size(); i++)
 	{
 		titleChars[i].size = { 192.0f, 192.0f };
-		titleChars[i].position = { (i / 2) * 128.0f, 0, 0 };
+		titleChars[i].position = { (i / 2) * 128.0f, -16.0f, 0 };
 		titleChars[i].position = {
 			titleChars[i].position.x + offset.x,
 			titleChars[i].position.y + offset.y,
@@ -76,11 +76,6 @@ void titleScene::loadResources()
 		titleChars[i].generateSprite("TitleChars.png", false, false, false, true);
 		titleChars[i].spriteUpdata(true);
 	}
-	//タイトル
-
-	//Move
-	//Number_pattern01
-	//Number_pattern02
 }
 
 void titleScene::initialize()
@@ -99,7 +94,7 @@ void titleScene::setParameter()
 	Block::setStaticData(directx);
 	Othello::setInput(input);
 	othello = std::make_unique<Othello>();
-	othello->Init({ 0.0f, 0.0f, -20.0f }, { 1.5f, 1.0f, 1.5f });
+	othello->Init({ 0.0f, 0.0f, -15.0f }, { 1.5f, 1.0f, 1.5f });
 	othello->Load(("Resources/StageData/tutorial.csv"));
 
 	//タイトルアニメーション準備
@@ -113,12 +108,18 @@ void titleScene::updata()
 	light->Update();
 
 	//マウス座標更新
-	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y,0.0f };
+	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y, 0.0f };
 
 	othello->updata(input->mousePosition);
 
+	static bool oldCellMoved = false;
+	static bool nowCellMoved = false;
+	oldCellMoved = nowCellMoved;
+	nowCellMoved = othello->isAllCellMoved();
+
 	//次のシーンへの移行条件
-	if (othello->GetSkipFlag())
+	if (othello->GetSkipFlag() &&
+		(nowCellMoved == false && oldCellMoved == false))
 	{
 		isNextScene = true;
 	}

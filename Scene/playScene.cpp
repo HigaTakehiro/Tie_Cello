@@ -42,9 +42,6 @@ void playScene::updata()
 	//ライト更新
 	light->Update();
 
-
-	EvenlyStaging::setWhiteBlackCount(othello->getWhiteCount(), othello->getBlackCount());
-
 	EvenlyStaging::setWhiteBlackCount(othello->GetWhiteCount(), othello->GetBlackCount());
 
 	EvenlyStaging::ratioSet(0.3f);
