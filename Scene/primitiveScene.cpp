@@ -71,5 +71,5 @@ void primitiveScene::setStaticData(directX* Directx, dxinput* Input, Audio* Audi
 
 void primitiveScene::finalize()
 {
-
+	//‰¹ƒŠƒ\[ƒX‚Ì‰ğ•ú
 }

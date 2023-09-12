@@ -81,7 +81,7 @@ void resultScene::draw2D()
 
 void resultScene::clearScene()
 {
-
+	//
 
 	//ŽŸ‚ÌƒV[ƒ“‚Ö‚ÌˆÚsðŒ
 	if (input->Triger(DIK_SPACE))
