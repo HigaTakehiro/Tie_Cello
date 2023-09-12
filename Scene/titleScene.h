@@ -1,6 +1,7 @@
 #pragma once
 #include"primitiveScene.h"
 #include <array>
+#include "../Othello/Othello.h"
 
 class titleScene
 	:public primitiveScene
@@ -38,7 +39,8 @@ private:
 	SingleSprite titleBack;
 	std::array<SingleSprite, 9 * 2> titleChars;
 
-	//タイトル
+	//オセロ
+	std::unique_ptr<Othello> othello;
 	
 	//タイトルアニメーション
 	bool isTitleAnimation = false;

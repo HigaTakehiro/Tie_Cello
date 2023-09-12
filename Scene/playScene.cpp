@@ -57,10 +57,10 @@ void playScene::updata()
 		nowratio = (float)white / (float)(white + black);
 	}*/
 
-	EvenlyStaging::setWhiteBlackCount(othello->getWhiteCount(), othello->getBlackCount());
+	EvenlyStaging::setWhiteBlackCount(othello->GetWhiteCount(), othello->GetBlackCount());
 	EvenlyStaging::ratioSet(0.3f);
 
-	if (othello->getNowColor() == Color::WHITE)
+	if (othello->GetNowColor() == Color::WHITE)
 	{
 		evenry->updata(true);
 	}

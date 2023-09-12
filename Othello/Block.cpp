@@ -25,7 +25,7 @@ void Block::setStaticData(directX* d)
 	loadResources();
 }
 
-void Block::init(blockType type, XMFLOAT3 position, int id)
+void Block::init(blockType type, XMFLOAT3 position, const XMFLOAT3& scale, int id)
 {
 	if (blockObject == nullptr)
 	{
@@ -46,7 +46,8 @@ void Block::init(blockType type, XMFLOAT3 position, int id)
 
 	startPos = position;
 	blockObject->SetPosition(position);
-	blockObject->SetScale({ 0.024f,0.024f,0.024f });
+	const XMFLOAT3 baseScale = { 0.024f,0.024f,0.024f };
+	blockObject->SetScale({ baseScale.x * scale.x, baseScale.y * scale.y, baseScale.z * scale.z });
 
 	index = id;
 }

@@ -94,6 +94,14 @@ void titleScene::initialize()
 
 void titleScene::setParameter()
 {
+	// 盤面の初期化
+	Cell::setStaticData(directx);
+	Block::setStaticData(directx);
+	Othello::setInput(input);
+	othello = std::make_unique<Othello>();
+	othello->Init({ 0.0f, 0.0f, -20.0f }, { 1.5f, 1.0f, 1.5f });
+	othello->Load(("Resources/StageData/tutorial.csv"));
+
 	//タイトルアニメーション準備
 	isPushStart = false;
 	isNextScene = false;
@@ -101,13 +109,16 @@ void titleScene::setParameter()
 
 void titleScene::updata()
 {
-	//タイトル画面更新処理
-	
+	//ライト更新
+	light->Update();
+
 	//マウス座標更新
 	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y,0.0f };
 
+	othello->updata(input->mousePosition);
+
 	//次のシーンへの移行条件
-	if (input->Triger(DIK_SPACE))
+	if (othello->GetSkipFlag())
 	{
 		isNextScene = true;
 	}
@@ -115,18 +126,18 @@ void titleScene::updata()
 
 void titleScene::drawBack()
 {
-	sample_back->drawSprite(directx->cmdList.Get());
-}
-
-void titleScene::draw3D()
-{
-}
-
-void titleScene::draw2D()
-{
 	titleBack.drawSprite(directx->cmdList.Get());
 	for (auto& i : titleChars)
 	{
 		i.drawSprite(directx->cmdList.Get());
 	}
+}
+
+void titleScene::draw3D()
+{
+	othello->Draw();
+}
+
+void titleScene::draw2D()
+{
 }

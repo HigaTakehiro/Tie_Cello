@@ -11,7 +11,12 @@ Othello::Othello() :
 	cell{},
 	initCell{},
 	width(8),
-	height(8)
+	height(8),
+	startColor(false),
+	blockDrawOffsetX(0),
+	blockDrawOffsetZ(0),
+	drawOffset(0, 0, 0),
+	drawScale(1.0f, 1.0f, 1.0f)
 {
 	cellList.clear();
 	blockList.clear();
@@ -23,14 +28,17 @@ Othello::~Othello()
 	blockList.clear();
 }
 
-void Othello::Init()
+void Othello::Init(const XMFLOAT3& offset, const XMFLOAT3& scale)
 {
 	cell.reserve(static_cast<size_t>(width * height));
 	initCell.reserve(cell.capacity());
 	nowPlayingCell = std::make_unique<Cell>();
+
+	drawOffset = offset;
+	drawScale = scale;
 }
 
-void Othello::updata(XMFLOAT3 mousepos)
+void Othello::updata(const XMFLOAT3& mousepos)
 {
 	playerInput();
 
@@ -43,11 +51,13 @@ void Othello::updata(XMFLOAT3 mousepos)
 			Cell::playerBlockPosUpdata(newblock->getBlockPosition());
 		}
 
+		//newblock->setScale(scale);
 		newblock->updata();
 	}
 
 	for (std::unique_ptr<Cell>& newcell : cellList)
 	{
+		//newcell->setScale(scale);
 		newcell->updata();
 	}
 
@@ -215,12 +225,13 @@ int Othello::Put(Color color)
 											cellPosY,
 											newblock->getBlockPosition().z
 										},
+										drawScale,
 										cellType::white, true);
 									nowPlayingCell->setIndex(index);
 									cellList.push_back(std::move(nowPlayingCell));
 
 									nowPlayingCell = std::make_unique<Cell>();
-									nowPlayingCell->init(newblock->getBlockPosition(), cellType::black, false);
+									nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::black, false);
 								}
 								else if (cell[index] == BLACK)
 								{
@@ -230,12 +241,13 @@ int Othello::Put(Color color)
 											cellPosY,
 											newblock->getBlockPosition().z
 										},
+										drawScale,
 										cellType::black, true);
 									nowPlayingCell->setIndex(index);
 									cellList.push_back(std::move(nowPlayingCell));
 
 									nowPlayingCell = std::make_unique<Cell>();
-									nowPlayingCell->init(newblock->getBlockPosition(), cellType::white, false);
+									nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::white, false);
 								}
 							}
 						}
@@ -484,7 +496,7 @@ int Othello::Load(const std::string& filePath)
 	//ステージの横幅
 	width = num[0];
 
-	//ステージの立幅
+	//ステージの縦幅
 	height = num[1];
 
 	//開始時の色
@@ -499,8 +511,8 @@ int Othello::Load(const std::string& filePath)
 		cell.push_back(static_cast<Color>(cellArray[i]));
 	}
 
-	blockDrawOffsetX = ((0.0f - ((float)width / 2)) * blockDistance) + blockDistance / 2;
-	blockDrawOffsetZ = ((0.0f + ((float)height / 2)) * blockDistance) - blockDistance / 2;
+	blockDrawOffsetX = ((0.0f - ((float)width / 2)) * blockDistance * drawScale.x) + blockDistance * drawScale.x / 2;
+	blockDrawOffsetZ = ((0.0f + ((float)height / 2)) * blockDistance * drawScale.z) - blockDistance * drawScale.z / 2;
 
 	for (int i = 0; i < cell.size(); i++)
 	{
@@ -516,12 +528,16 @@ int Othello::Load(const std::string& filePath)
 		blockType type = blockType(i % 2);
 
 		std::unique_ptr<Block> newblock = std::make_unique<Block>();
-		newblock->init(type,
-			{
-				blockDrawOffsetX + ((float)x * blockDistance),
-				-30.0f,
-				blockDrawOffsetZ - ((float)z * blockDistance)
-			}, i);
+		XMFLOAT3 pos =
+		{
+			blockDrawOffsetX + ((float)x * blockDistance) * drawScale.x,
+			-30.0f,
+			blockDrawOffsetZ - ((float)z * blockDistance) * drawScale.z
+		};
+		pos.x += drawOffset.x;
+		pos.y += drawOffset.y;
+		pos.z += drawOffset.z;
+		newblock->init(type, pos, drawScale, i);
 
 		blockList.push_back(std::move(newblock));
 
@@ -537,6 +553,7 @@ int Othello::Load(const std::string& filePath)
 					cellPosY,
 					blockList.back()->getBlockPosition().z
 				},
+				drawScale,
 				cellType::white, true);
 			newcell->setIndex(i);
 			cellList.push_back(std::move(newcell));
@@ -551,6 +568,7 @@ int Othello::Load(const std::string& filePath)
 					cellPosY,
 					blockList.back()->getBlockPosition().z
 				},
+				drawScale,
 				cellType::black, true);
 			newcell->setIndex(i);
 			cellList.push_back(std::move(newcell));
@@ -561,11 +579,11 @@ int Othello::Load(const std::string& filePath)
 
 	if (GetStartColor() == BLACK)
 	{
-		nowPlayingCell->init(blockList[0]->getBlockPosition(), cellType::black, false);
+		nowPlayingCell->init(blockList[0]->getBlockPosition(), drawScale, cellType::black, false);
 	}
 	else if (GetStartColor() == WHITE)
 	{
-		nowPlayingCell->init(blockList[0]->getBlockPosition(), cellType::white, false);
+		nowPlayingCell->init(blockList[0]->getBlockPosition(), drawScale, cellType::white, false);
 	}
 
 	initCell = cell;

@@ -72,7 +72,7 @@ void selectScene::updata()
 		}
 	}
 	// ステージ読み込み
-	if (input->Triger(DIK_RETURN))
+	if (input->Triger(DIK_SPACE))
 	{
 		isLoadStage = loadStage();
 	}
