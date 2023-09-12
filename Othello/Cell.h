@@ -65,6 +65,8 @@ public:
 
 	bool getIsPut() { return isPut; }
 
+	bool getIsReverse() { return isReverse; }
+
 	void setIndex(int id) { index = id; }
 
 	int getIndex() { return index; }

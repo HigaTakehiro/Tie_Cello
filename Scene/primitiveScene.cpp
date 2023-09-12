@@ -11,6 +11,8 @@ XMFLOAT3 primitiveScene::stageIconOffset = { 340,360,0 };
 bool primitiveScene::isTutorial = false;
 bool primitiveScene::isClearOrOver = false;
 bool primitiveScene::isSelectOrTitle = false;
+std::unique_ptr<Othello> primitiveScene::othello = std::make_unique<Othello>();
+std::unique_ptr<EvenlyStaging> primitiveScene::evenry = std::make_unique<EvenlyStaging>();
 
 primitiveScene::primitiveScene()
 {
@@ -62,6 +64,9 @@ void primitiveScene::setStaticData(directX* Directx, dxinput* Input, Audio* Audi
 
 	//マウスカーソル非表示
 	//ShowCursor(false);
+
+	Cell::setStaticData(directx);
+	Block::setStaticData(directx);
 }
 
 void primitiveScene::finalize()

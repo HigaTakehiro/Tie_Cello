@@ -37,13 +37,20 @@ public:
 		blackCount = bcount;
 	}
 
-	void updata(bool iswhite);
+	void updata();
+
+	void setIsWhite(bool iswhite)
+	{
+		isWhite = iswhite;
+	}
 
 	static void reSetBuffer();
 
 	void draw3D();
 
 	void draw2D();
+
+	bool getIsClear() { return isClear; }
 
 private:
 
@@ -59,7 +66,8 @@ private:
 	static int whiteCount;		//”’‚Ì”
 	static int blackCount;		//•‚Ì”
 
-	bool isWhite;				//”’‚Ìè”Ô‚©‚Ç‚¤‚©
+	bool isClear = false;
+	bool isWhite = false;		//”’‚Ìè”Ô‚©‚Ç‚¤‚©
 	SingleSprite clearLine;
 	SingleSprite nowLine;
 	SingleSprite whiteBack;

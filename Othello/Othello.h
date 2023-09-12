@@ -121,9 +121,31 @@ public: //メンバ関数
 	size_t GetSize() const { return cell.size(); }
 	Color GetCell(const size_t& index) const;
 	Color GetStartColor() const;
+
+	Color getNowColor() { return nowColor; }
+	int getBlackCount() { return blackCellCount; }
+	int getWhiteCount() { return whiteCellCount; }
+	bool isAllCellMoved()
+	{
+		bool ismove = false;
+		for (std::unique_ptr<Cell>& newcell : cellList)
+		{
+			if (newcell->getIsReverse())
+			{
+				ismove = true;
+			}
+		}
+		return ismove;
+	}
+	bool getIsFinish()
+	{
+		return isFinish;
+	}
+
 	Color GetNowColor() { return nowColor; }
 	int GetBlackCount() { return blackCellCount; }
 	int GetWhiteCount() { return whiteCellCount; }
 	bool GetSkipFlag() const { return isSkip; }
 	bool GetFinishFlag() const { return isFinish; }
+
 };

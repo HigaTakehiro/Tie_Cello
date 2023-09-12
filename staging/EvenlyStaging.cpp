@@ -33,10 +33,8 @@ void EvenlyStaging::init()
 	blackBack.generateSprite("black_color.png");
 }
 
-void EvenlyStaging::updata(bool iswhite)
+void EvenlyStaging::updata()
 {
-	isWhite = iswhite;
-
 	changeBackSprite();
 
 	setParticle();
@@ -54,6 +52,11 @@ void EvenlyStaging::updata(bool iswhite)
 	for (std::unique_ptr<SingleParticle>& newp : particleList)
 	{
 		newp->updata();
+	}
+
+	if (nowRatio == clearRatio)
+	{
+		isClear = true;
 	}
 }
 

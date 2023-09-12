@@ -43,6 +43,9 @@ void resultScene::updata()
 	//マウス座標更新
 	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y,0.0f };
 
+	evenry->updata();
+	othello->updata(input->mousePosition);
+
 	if (isClearOrOver)
 	{
 		clearScene();
@@ -62,11 +65,13 @@ void resultScene::updata()
 void resultScene::drawBack()
 {
 	sample_back->drawSprite(directx->cmdList.Get());
+	evenry->draw2D();
 }
 
 void resultScene::draw3D()
 {
-	
+	evenry->draw3D();
+	othello->Draw();
 }
 
 void resultScene::draw2D()

@@ -126,7 +126,12 @@ int Othello::Put(Color color)
 {
 	if (nowPlayerPointBlockIndex == -1)
 	{
-		return -1;
+		return 0;
+	}
+
+	if (!input->Mouse_LeftTriger())
+	{
+		return 0;
 	}
 
 	//置く場所のインデックスをセット
@@ -417,42 +422,39 @@ void Othello::playerInput()
 		return;
 	}
 
-	if (input->Mouse_LeftTriger())
+	if (IsSkip(nowColor))
 	{
-		if (IsSkip(nowColor))
+		if (isSkip && !isAllCellMoved())
 		{
-			if (isSkip)
-			{
-				isFinish = true;
-			}
-			else
-			{
-				isSkip = true;
-
-				if (nowColor == Color::BLACK)
-				{
-					nowColor = Color::WHITE;
-				}
-				else if (nowColor == Color::WHITE)
-				{
-					nowColor = Color::BLACK;
-				}
-			}
+			isFinish = true;
 		}
 		else
 		{
-			isSkip = false;
+			isSkip = true;
 
-			if (Put(nowColor) != 0)
+			if (nowColor == Color::BLACK)
 			{
-				if (nowColor == Color::BLACK)
-				{
-					nowColor = Color::WHITE;
-				}
-				else if (nowColor == Color::WHITE)
-				{
-					nowColor = Color::BLACK;
-				}
+				nowColor = Color::WHITE;
+			}
+			else if (nowColor == Color::WHITE)
+			{
+				nowColor = Color::BLACK;
+			}
+		}
+	}
+	else
+	{
+		isSkip = false;
+
+		if (Put(nowColor) != 0)
+		{
+			if (nowColor == Color::BLACK)
+			{
+				nowColor = Color::WHITE;
+			}
+			else if (nowColor == Color::WHITE)
+			{
+				nowColor = Color::BLACK;
 			}
 		}
 	}
@@ -541,7 +543,7 @@ int Othello::Load(const std::string& filePath)
 
 		blockList.push_back(std::move(newblock));
 
-		
+
 		//石を置く
 		if (cell[i] == WHITE)
 		{
