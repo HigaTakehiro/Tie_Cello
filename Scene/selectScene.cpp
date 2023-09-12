@@ -32,7 +32,7 @@ void selectScene::loadResources()
 	{
 		number[i].size = { 192.0f, 192.0f };
 		number[i].position = { winW / 2.0f + ((i % 2) - 1) * number[i].size.x, winH / 2.0f - number[i].size.y / 2.0f, 0 };
-		number[i].texSize = { 64.0f, 64.0f };
+		number[i].texSize = { 192.0f, 192.0f };
 		number[i].generateSprite("Number_pattern01.png");
 	}
 }
@@ -72,7 +72,7 @@ void selectScene::updata()
 		}
 	}
 	// ステージ読み込み
-	if (input->Triger(DIK_RETURN))
+	if (input->Triger(DIK_SPACE))
 	{
 		isLoadStage = loadStage();
 	}

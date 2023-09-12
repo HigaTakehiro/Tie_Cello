@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void init(blockType type, XMFLOAT3 position, int id);
+	void init(blockType type, XMFLOAT3 position, const XMFLOAT3& scale, int id);
 
 	/// <summary>
 	/// XV
