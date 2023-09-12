@@ -4,6 +4,10 @@ directX::directX()
 {
 }
 
+directX::~directX()
+{
+}
+
 //‰Šú‰»
 void directX::Init(Window_Generate* Win)
 {
