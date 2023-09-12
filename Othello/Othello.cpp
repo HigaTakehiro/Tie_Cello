@@ -34,6 +34,9 @@ void Othello::Init(const XMFLOAT3& offset, const XMFLOAT3& scale)
 	initCell.reserve(cell.capacity());
 	nowPlayingCell = std::make_unique<Cell>();
 
+	isSkip = false;
+	isTie = false;
+	isFinish = false;
 	drawOffset = offset;
 	drawScale = scale;
 }
@@ -468,13 +471,15 @@ int Othello::Load(const std::string& filePath)
 	}
 
 	cell.clear();
+	blockList.clear();
+	cellList.clear();
 
 	std::ifstream ifs(filePath);
 	std::string str;
 
 	if (ifs.fail())
 	{
-		//OutputDebugStringA("ファイルが開けません。\n");
+		OutputDebugStringA("ファイルが開けません。\n");
 		return -1;
 	}
 
@@ -542,7 +547,6 @@ int Othello::Load(const std::string& filePath)
 		newblock->init(type, pos, drawScale, i);
 
 		blockList.push_back(std::move(newblock));
-
 
 		//石を置く
 		if (cell[i] == WHITE)
