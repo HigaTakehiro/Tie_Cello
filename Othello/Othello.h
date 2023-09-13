@@ -2,18 +2,10 @@
 #include <vector>
 #include <string>
 #include"../FbxLoder/Object3d_FBX.h"
+#include "ColorFlag.h"
 #include"Cell.h"
 #include"Block.h"
 #include"../Input/dxInput.h"
-
-enum Color
-{
-	EMPTY,
-	BLACK,
-	WHITE,
-	HOLE,
-	NONE = -1
-};
 
 class Othello
 {
@@ -33,8 +25,7 @@ public: //静的メンバ関数
 private: //メンバ変数
 
 	//マップデータ
-	std::vector<Color> cell;
-	std::vector<Color> initCell;
+	std::vector<CellData> cell;
 
 	int width;  //幅
 	int height; //高さ
@@ -73,7 +64,7 @@ private: //メンバ変数
 	int nowPlayerPointBlockZ = 0;
 
 	//現在の色
-	Color nowColor = Color::BLACK;
+	ColorFlag nowColor = ColorFlag::BLACK;
 
 	int blackCellCount = 0;
 	int whiteCellCount = 0;
@@ -102,7 +93,7 @@ public: //メンバ関数
 	void Reset();
 
 	// 石を置く
-	int Put(Color color);
+	int Put(ColorFlag color);
 
 	//どのブロックをマウスで指しているか判定
 	void isNowPlayerPointBlock(XMFLOAT3 mousepos);
@@ -115,15 +106,15 @@ public: //メンバ関数
 
 	// スキップ判定
 	//置ける所がなければスキップ
-	bool IsSkip(Color color);
+	bool IsSkip(ColorFlag color);
 
 	int GetWidth() const { return width; }
 	int GetHeight() const { return height; }
 	size_t GetSize() const { return cell.size(); }
-	Color GetCell(const size_t& index) const;
-	Color GetStartColor() const;
+	CellData GetCell(const size_t& index) const { return cell[index]; }
+	ColorFlag GetStartColor() const;
 
-	Color getNowColor() { return nowColor; }
+	ColorFlag getNowColor() { return nowColor; }
 	int getBlackCount() { return blackCellCount; }
 	int getWhiteCount() { return whiteCellCount; }
 	bool isAllCellMoved()
@@ -139,7 +130,7 @@ public: //メンバ関数
 		return ismove;
 	}
 
-	Color GetNowColor() { return nowColor; }
+	ColorFlag GetNowColor() { return nowColor; }
 	int GetBlackCount() { return blackCellCount; }
 	int GetWhiteCount() { return whiteCellCount; }
 	bool GetSkipFlag() const { return isSkip; }

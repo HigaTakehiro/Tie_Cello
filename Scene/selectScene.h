@@ -33,6 +33,8 @@ public:
 private:
 	//ステージ読み込み
 	bool loadStage();
+	// テクスチャとマウス座標の当たり判定
+	bool IsTex2Mouse(const SingleSprite& sprite);
 
 private:
 	//マウス座標
@@ -42,9 +44,13 @@ private:
 	SingleSprite selectBack;
 	// 数字
 	std::array<SingleSprite, 2> number;
+	// ←
+	SingleSprite arrowL;
+	// →
+	SingleSprite arrowR;
 
 	// ステージの数
-	const int stageCount = 4;
+	const int stageCount = 9;
 	// 選択中のステージ
 	int nowStageNumber = 1;
 	

@@ -35,6 +35,19 @@ void selectScene::loadResources()
 		number[i].texSize = { 192.0f, 192.0f };
 		number[i].generateSprite("Number_pattern01.png");
 	}
+	//←
+	arrowL.size = { 128.0f, 128.0f };
+	arrowL.position = { arrowR.size.x, winH / 2.0f, 0.0f };
+	arrowL.rotation = 180.0f;
+	arrowL.anchorpoint = { 0.5f, 0.5f };
+	arrowL.generateSprite("Arrow.png");
+	arrowL.spriteUpdata();
+	//→
+	arrowR.size = arrowL.size;
+	arrowR.position = { winW - arrowR.size.x, winH / 2.0f, 0.0f };
+	arrowR.anchorpoint = { 0.5f, 0.5f };
+	arrowR.generateSprite("Arrow.png");
+	arrowR.spriteUpdata();
 }
 
 void selectScene::initialize()
@@ -54,8 +67,30 @@ void selectScene::setParameter()
 void selectScene::updata()
 {
 	//マウス座標更新
-	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y,0.0f };
+	MOUSE_POS = { (float)input->mousePoint.x,(float)input->mousePoint.y, 0.0f };
 
+	bool isLeft = IsTex2Mouse(arrowL) && nowStageNumber > 1;
+	bool isRight = IsTex2Mouse(arrowR) && nowStageNumber < stageCount;
+	bool isLoad = IsTex2Mouse(number[0]) || IsTex2Mouse(number[1]);
+
+	if (input->Mouse_LeftTriger())
+	{
+		// ステージ切り替え
+		if (isLeft)
+		{
+			nowStageNumber--;
+		}
+		if (isRight)
+		{
+			nowStageNumber++;
+		}
+		// ステージ読み込み
+		if (isLoad)
+		{
+			isLoadStage = loadStage();
+		}
+	}
+#ifdef _DEBUG
 	// ステージ切り替え
 	if (input->Triger(DIK_LEFT) || input->Triger(DIK_A))
 	{
@@ -72,10 +107,11 @@ void selectScene::updata()
 		}
 	}
 	// ステージ読み込み
-	if (input->Mouse_LeftTriger())
+	if (input->Triger(DIK_SPACE))
 	{
-		isLoadStage = loadStage();
+		isNextScene = true;
 	}
+#endif // _DEBUG
 
 	//次のシーンへの移行条件
 	if (isLoadStage)
@@ -86,7 +122,7 @@ void selectScene::updata()
 
 void selectScene::drawBack()
 {
-	sample_back->drawSprite(directx->cmdList.Get());
+	selectBack.drawSprite(directx->cmdList.Get());
 }
 
 void selectScene::draw3D()
@@ -95,7 +131,14 @@ void selectScene::draw3D()
 
 void selectScene::draw2D()
 {
-	selectBack.drawSprite(directx->cmdList.Get());
+	if (nowStageNumber > 1)
+	{
+		arrowL.drawSprite(directx->cmdList.Get());
+	}
+	if (nowStageNumber < stageCount)
+	{
+		arrowR.drawSprite(directx->cmdList.Get());
+	}
 
 	char numberStr[10];
 	sprintf_s(numberStr, "%02d", nowStageNumber);
@@ -115,4 +158,32 @@ bool selectScene::loadStage()
 {
 	Othello::SetLoadStageNumber(nowStageNumber);
 	return true;
+}
+
+bool selectScene::IsTex2Mouse(const SingleSprite& sprite)
+{
+	float left = (0.0f - sprite.anchorpoint.x) * sprite.baceSize.x + sprite.position.x;
+	float right = (1.0f - sprite.anchorpoint.x) * sprite.baceSize.x + sprite.position.x;
+	float top = (0.0f - sprite.anchorpoint.y) * sprite.baceSize.y + sprite.position.y;
+	float bottom = (1.0f - sprite.anchorpoint.y) * sprite.baceSize.y + sprite.position.y;
+
+	if (sprite.isFlipX == true)
+	{
+		left = -left;
+		right = -right;
+	}
+
+	if (sprite.isFlipY == true)
+	{
+		top = -top;
+		bottom = -bottom;
+	}
+
+	if (left <= input->mousePoint.x && input->mousePoint.x <= right &&
+		top <= input->mousePoint.y && input->mousePoint.y <= bottom)
+	{
+		return true;
+	}
+
+	return false;
 }

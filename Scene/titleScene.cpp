@@ -123,6 +123,12 @@ void titleScene::updata()
 	{
 		isNextScene = true;
 	}
+#ifdef _DEBUG
+	if (input->Triger(DIK_SPACE))
+	{
+		isNextScene = true;
+	}
+#endif // _DEBUG
 }
 
 void titleScene::drawBack()

@@ -46,7 +46,7 @@ void playScene::updata()
 
 	EvenlyStaging::ratioSet(0.3f);
 
-	if (othello->GetNowColor() == Color::WHITE)
+	if (othello->GetNowColor() == ColorFlag::WHITE)
 	{
 		evenry->setIsWhite(true);
 	}
