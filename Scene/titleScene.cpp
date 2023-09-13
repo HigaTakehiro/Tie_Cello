@@ -22,6 +22,17 @@ void titleScene::loadResources()
 	titleBack.size = { 1280,720 };
 	titleBack.generateSprite("Tiethello_background_tentative.png");
 
+	clickMessage.size = { 420, 92 };
+	clickMessage.position = { 424, 600, 0 };
+	clickMessage.generateSprite("ClickMessage.png");
+	clickMessage.spriteUpdata();
+
+	arrow.size = { 128, 128 };
+	arrow.position = { 940, 440, 0 };
+	arrow.rotation = 180;
+	arrow.generateSprite("Arrow.png");
+	arrow.spriteUpdata();
+
 	const size_t charCount = titleChars.size() / 2;
 	const XMFLOAT3 offset = { 32.0f, 100.0f, 0 };
 	for (int i = 0; i < titleChars.size(); i++)
@@ -137,6 +148,8 @@ void titleScene::updata()
 void titleScene::drawBack()
 {
 	titleBack.drawSprite(directx->cmdList.Get());
+	clickMessage.drawSprite(directx->cmdList.Get());
+	arrow.drawSprite(directx->cmdList.Get());
 	for (auto& i : titleChars)
 	{
 		i.drawSprite(directx->cmdList.Get());
