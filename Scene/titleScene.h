@@ -39,9 +39,6 @@ private:
 	SingleSprite titleBack;
 	std::array<SingleSprite, 9 * 2> titleChars;
 
-	//オセロ
-	std::unique_ptr<Othello> othello;
-	
 	//タイトルアニメーション
 	bool isTitleAnimation = false;
 

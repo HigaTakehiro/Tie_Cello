@@ -126,6 +126,7 @@
     <ClInclude Include="Light\Light.h" />
     <ClInclude Include="Othello\Block.h" />
     <ClInclude Include="Othello\Cell.h" />
+    <ClInclude Include="Othello\ColorFlag.h" />
     <ClInclude Include="Othello\Othello.h" />
     <ClInclude Include="Particle\Particle.h" />
     <ClInclude Include="Particle\particleManagerOnTime.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Othello\Block.cpp" />
     <ClCompile Include="Othello\Cell.cpp" />
+    <ClCompile Include="Othello\ColorFlag.cpp" />
     <ClCompile Include="Othello\Othello.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
     <ClCompile Include="Particle\particleManagerOnTime.cpp" />
