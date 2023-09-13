@@ -138,76 +138,117 @@ int Othello::Put(ColorFlag color)
 
 	//置く場所のインデックスをセット
 	int index = nowPlayerPointBlockIndex;
+	bool isBigC = false; //デカマスを通るかどうか(自分の色)
+	bool isBigO = false; //デカマスを通るかどうか(相手の色)
 
 	//置く場所に何かしら置いてあったら
-	if (cell[index].colorFlag != ColorFlag::EMPTY)
+	if (cell[index].colorFlag != ColorFlag::EMPTY && cell[index].colorFlag != ColorFlag::BIG_E)
 	{
 		return 0;
 	}
 
+	ColorFlag skipColor[] = {
+		ColorFlag::EMPTY,
+		ColorFlag::HOLE,
+		ColorFlag::BIG_E
+	};
+
 	//ひっくり返った枚数
 	int count = 0;
 
-	//相手の色
-	ColorFlag other = ColorFlag::EMPTY;
-
+	ColorFlag bigColor = ColorFlag::EMPTY; //自分の色(デカマス)
+	ColorFlag other = ColorFlag::EMPTY; //相手の色
+	ColorFlag bigOther = ColorFlag::EMPTY; //相手の色(デカマス)
+	// colorがデカマスだったらノーマルに設定し直す
+	if (color == ColorFlag::BIG_B)
+	{
+		color = ColorFlag::BLACK;
+	}
+	else if (color == ColorFlag::BIG_W)
+	{
+		color = ColorFlag::WHITE;
+	}
+	// それぞれに対応した物を設定する
 	if (color == ColorFlag::BLACK)
 	{
+		bigColor = ColorFlag::BIG_B;
 		other = ColorFlag::WHITE;
+		bigOther = ColorFlag::BIG_W;
 	}
 	else if (color == ColorFlag::WHITE)
 	{
+		bigColor = ColorFlag::BIG_W;
 		other = ColorFlag::BLACK;
+		bigOther = ColorFlag::BIG_B;
 	}
 
-	//置くマスを中心とした３行
-	for (int i = -1; i <= 1; i++)
+	if (cell[index].colorFlag == ColorFlag::EMPTY)
 	{
-		//置くマスを中心とした３列
-		for (int j = -1; j <= 1; j++)
+		//置くマスを中心とした３行
+		for (int dirY = -1; dirY <= 1; dirY++)
 		{
-			//中心(置くマス)だったらとばす
-			if (i == 0 && j == 0)
+			//置くマスを中心とした３列
+			for (int dirX = -1; dirX <= 1; dirX++)
 			{
-				continue;
-			}
-			//場外だったらとばす
-			if (nowPlayerPointBlockX + j < 0 || nowPlayerPointBlockZ + i < 0 ||
-				nowPlayerPointBlockX + j >= width || nowPlayerPointBlockZ + i >= height)
-			{
-				continue;
-			}
-
-			//3*3マスの中の1マスのインデックスをセット
-			index = (nowPlayerPointBlockZ + i) * width + (nowPlayerPointBlockX + j);
-
-			//1マス周囲が同じ色か空だったらとばす
-			if (cell[index].colorFlag != other)
-			{
-				continue;
-			}
-
-			//マップの最大幅
-			const int size = 8;
-
-			//2マス先以降を判定
-			for (int s = 2; s < size; s++)
-			{
-				//場外だったらとばす
-				if (nowPlayerPointBlockX + (j * s) < 0 || nowPlayerPointBlockZ + (i * s) < 0 ||
-					nowPlayerPointBlockX + (j * s) >= width || nowPlayerPointBlockZ + (i * s) >= height)
+				//中心(置くマス)だったらとばす
+				if (dirY == 0 && dirX == 0)
 				{
-					break;
+					continue;
+				}
+				//場外だったらとばす
+				if (nowPlayerPointBlockX + dirX < 0 || nowPlayerPointBlockZ + dirY < 0 ||
+					nowPlayerPointBlockX + dirX >= width || nowPlayerPointBlockZ + dirY >= height)
+				{
+					continue;
 				}
 
-				//2マス先以降のインデックスをセット
-				index += i * width + j;
+				//3*3マスの中の1マスのインデックスをセット
+				index = (nowPlayerPointBlockZ + dirY) * width + (nowPlayerPointBlockX + dirX);
+				isBigC = false;
+				isBigO = false;
 
-				//インデックスがマップの配列サイズ内だったら
-				if (index >= 0 && index < cell.size())
+				//1マス周囲が同じ色か空だったらとばす
+				if (cell[index].colorFlag == bigOther)
 				{
-					//2マス先以降に石がないなら抜ける
-					if (cell[index].colorFlag != ColorFlag::BLACK && cell[index].colorFlag != ColorFlag::WHITE)
+					isBigO = true;
+				}
+				else if (cell[index].colorFlag != other)
+				{
+					continue;
+				}
+
+				//マップの最大幅
+				const int size = (width > height) ? width : height;
+
+				//2マス先以降を判定
+				for (int s = 2; s < size; s++)
+				{
+					//場外だったらとばす
+					if (nowPlayerPointBlockX + (dirX * s) < 0 || nowPlayerPointBlockZ + (dirY * s) < 0 ||
+						nowPlayerPointBlockX + (dirX * s) >= width || nowPlayerPointBlockZ + (dirY * s) >= height)
+					{
+						break;
+					}
+
+					//2マス先以降のインデックスをセット
+					index += dirY * width + dirX;
+
+					//インデックスが配列サイズ外だったらとばす
+					if (index < 0 || index >= cell.size())
+					{
+						break;
+					}
+
+					bool flag = false;
+					for (auto j : skipColor)
+					{
+						if (cell[index].colorFlag == j)
+						{
+							flag = true;
+							break;
+						}
+					}
+					if (flag)
 					{
 						break;
 					}
@@ -215,6 +256,11 @@ int Othello::Put(ColorFlag color)
 					//隣が違う色で、2マス先以降に同じ色があった場合ひっくり返す
 					if (cell[index].colorFlag == color)
 					{
+						if (isBigC || isBigO)
+						{
+							break;
+						}
+
 						//石を置く
 						index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
 						cell[index].colorFlag = color;
@@ -259,31 +305,505 @@ int Othello::Put(ColorFlag color)
 							}
 						}
 
-						//ひっくり返した枚数
-						count += s;
-
 						//間のマスをひっくり返す
 						for (int n = 1; n < s; n++)
 						{
 							//ひっくり返すマスのインデックスをセット
-							index += i * width + j;
+							index += dirY * width + dirX;
+							count++;
 
-							//ひっくり返す(色を変える)
-							for (std::unique_ptr<Cell>& newcell : cellList)
+							if (cell[index].GetBigCell() == NONE)
 							{
-								if (newcell->getIndex() == index)
+								//ひっくり返す(色を変える)
+								for (std::unique_ptr<Cell>& newcell : cellList)
 								{
-									newcell->setReverce();
+									if (newcell->getIndex() == index)
+									{
+										newcell->setReverce();
+									}
 								}
+								cell[index].colorFlag = color;
 							}
-							cell[index].colorFlag = color;
+							else
+							{
+								int indexLT = GetBigIndex(index);
+
+								index += dirY * width + dirX;
+								n++;
+
+								//ひっくり返す(色を変える)
+								for (std::unique_ptr<Cell>& newcell : cellList)
+								{
+									if (newcell->getIndex() == indexLT)
+									{
+										newcell->setReverce();
+									}
+								}
+
+								BigChange(indexLT, bigColor);
+							}
 						}
 
 						//ひっくり返したら別の方向を探索するため抜ける
 						break;
 					}
+					else if (cell[index].colorFlag == bigColor)
+					{
+						if (isBigO)
+						{
+							break;
+						}
+
+						if (isBigC)
+						{
+							//石を置く
+							index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
+							cell[index].colorFlag = color;
+
+							for (std::unique_ptr<Block>& newblock : blockList)
+							{
+								if (newblock->getIndex() == nowPlayerPointBlockIndex)
+								{
+									//石を置く
+									if (cell[index].colorFlag == WHITE)
+									{
+										nowPlayingCell->init(
+											{
+												newblock->getBlockPosition().x,
+												cellPosY,
+												newblock->getBlockPosition().z
+											},
+											drawScale,
+											cellType::white, true);
+										nowPlayingCell->setIndex(index);
+										cellList.push_back(std::move(nowPlayingCell));
+
+										nowPlayingCell = std::make_unique<Cell>();
+										nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::black, false);
+									}
+									else if (cell[index].colorFlag == BLACK)
+									{
+										nowPlayingCell->init(
+											{
+												newblock->getBlockPosition().x,
+												cellPosY,
+												newblock->getBlockPosition().z
+											},
+											drawScale,
+											cellType::black, true);
+										nowPlayingCell->setIndex(index);
+										cellList.push_back(std::move(nowPlayingCell));
+
+										nowPlayingCell = std::make_unique<Cell>();
+										nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::white, false);
+									}
+								}
+							}
+
+							//間のマスをひっくり返す
+							for (int n = 1; n < s; n++)
+							{
+								//ひっくり返すマスのインデックスをセット
+								index += dirY * width + dirX;
+								count++;
+
+								if (cell[index].GetBigCell() == NONE)
+								{
+									//ひっくり返す(色を変える)
+									for (std::unique_ptr<Cell>& newcell : cellList)
+									{
+										if (newcell->getIndex() == index)
+										{
+											newcell->setReverce();
+										}
+									}
+									cell[index].colorFlag = color;
+								}
+								else
+								{
+									int indexLT = GetBigIndex(index);
+
+									index += dirY * width + dirX;
+									n++;
+
+									//ひっくり返す(色を変える)
+									for (std::unique_ptr<Cell>& newcell : cellList)
+									{
+										if (newcell->getIndex() == indexLT)
+										{
+											newcell->setReverce();
+										}
+									}
+
+									BigChange(indexLT, bigColor);
+								}
+							}
+
+							//ひっくり返したら別の方向を探索するため抜ける
+							break;
+						}
+
+						isBigC != isBigC;
+					}
+					else if (cell[index].colorFlag == other)
+					{
+						if (isBigO)
+						{
+							break;
+						}
+					}
+					else if (cell[index].colorFlag == bigOther)
+					{
+						isBigO = !isBigO;
+					}
 				}
 			}
+		}
+	}
+	else if (cell[index].colorFlag == ColorFlag::BIG_E)
+	{
+		int indexLT = index;
+		if (cell[index].GetBigCell() % 2 == 1)
+		{
+			indexLT -= 1;
+		}
+		if (cell[index].GetBigCell() / 2 == 1)
+		{
+			indexLT -= width;
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			index = indexLT;
+			if (i % 2 == 1)
+			{
+				index += 1;
+			}
+			if (i / 2 == 1)
+			{
+				index += width;
+			}
+
+			for (int dir = 0; dir < 3; dir++)
+			{
+				int dirX = 0, dirY = 0;
+
+				switch (i)
+				{
+				case BigCell::LT:
+					if (dir % 2 == 0)
+					{
+						dirX = -1;
+					}
+					if (dir / 2 == 0)
+					{
+						dirY = -1;
+					}
+					break;
+				case BigCell::RT:
+					if (dir > 0)
+					{
+						dirX = +1;
+					}
+					if (dir / 2 == 0)
+					{
+						dirY = -1;
+					}
+					break;
+				case BigCell::LB:
+					if (dir / 2 == 0)
+					{
+						dirX = -1;
+					}
+					if (dir > 0)
+					{
+						dirY = +1;
+					}
+					break;
+				case BigCell::RB:
+					if (dir % 2 == 0)
+					{
+						dirX = +1;
+					}
+					if (dir > 0)
+					{
+						dirY = +1;
+					}
+					break;
+				default:
+					break;
+				}
+
+				if (nowPlayerPointBlockX + dirX < 0 || nowPlayerPointBlockZ + dirY < 0 ||
+					nowPlayerPointBlockX + dirX >= width || nowPlayerPointBlockZ + dirY >= height)
+				{
+					continue;
+				}
+
+				index = (nowPlayerPointBlockZ + dirY) * width + (nowPlayerPointBlockX + dirX);
+				isBigC = false;
+				isBigO = false;
+
+				if (cell[index].colorFlag == bigOther)
+				{
+					isBigO = true;
+				}
+				else if (cell[index].colorFlag != other)
+				{
+					continue;
+				}
+
+				const int size = (width > height) ? width : height;
+				//2マス先以降を判定
+				for (int s = 2; s < size; s++)
+				{
+					//場外だったらとばす
+					if (nowPlayerPointBlockX + (dirX * s) < 0 || nowPlayerPointBlockZ + (dirY * s) < 0 ||
+						nowPlayerPointBlockX + (dirX * s) >= width || nowPlayerPointBlockZ + (dirY * s) >= height)
+					{
+						break;
+					}
+
+					//2マス先以降のインデックスをセット
+					index += dirY * width + dirX;
+
+					//インデックスが配列サイズ外だったらとばす
+					if (index < 0 || index >= cell.size())
+					{
+						break;
+					}
+
+					bool flag = false;
+					for (auto j : skipColor)
+					{
+						if (cell[index].colorFlag == j)
+						{
+							flag = true;
+							break;
+						}
+					}
+					if (flag)
+					{
+						break;
+					}
+
+					XMFLOAT3 bigScale =
+					{
+						drawScale.x * 2.0f,
+						drawScale.y * 1.0f,
+						drawScale.z * 2.0f
+					};
+
+					//隣が違う色で、2マス先以降に同じ色があった場合ひっくり返す
+					if (cell[index].colorFlag == color)
+					{
+						if (isBigC || isBigO)
+						{
+							break;
+						}
+
+						//石を置く
+						index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
+						BigChange(index, color);
+
+						for (std::unique_ptr<Block>& newblock : blockList)
+						{
+							if (newblock->getIndex() == nowPlayerPointBlockIndex)
+							{
+								//石を置く
+								if (cell[index].colorFlag == BIG_W)
+								{
+									nowPlayingCell->init(
+										{
+											newblock->getBlockPosition().x,
+											cellPosY,
+											newblock->getBlockPosition().z
+										},
+										bigScale,
+										cellType::white, true);
+									nowPlayingCell->setIndex(index);
+									cellList.push_back(std::move(nowPlayingCell));
+
+									nowPlayingCell = std::make_unique<Cell>();
+									nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::black, false);
+								}
+								else if (cell[index].colorFlag == BIG_B)
+								{
+									nowPlayingCell->init(
+										{
+											newblock->getBlockPosition().x,
+											cellPosY,
+											newblock->getBlockPosition().z
+										},
+										bigScale,
+										cellType::black, true);
+									nowPlayingCell->setIndex(index);
+									cellList.push_back(std::move(nowPlayingCell));
+
+									nowPlayingCell = std::make_unique<Cell>();
+									nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::white, false);
+								}
+							}
+						}
+
+						//間のマスをひっくり返す
+						for (int n = 1; n < s; n++)
+						{
+							//ひっくり返すマスのインデックスをセット
+							index += dirY * width + dirX;
+							count++;
+
+							if (cell[index].GetBigCell() == NONE)
+							{
+								//ひっくり返す(色を変える)
+								for (std::unique_ptr<Cell>& newcell : cellList)
+								{
+									if (newcell->getIndex() == index)
+									{
+										newcell->setReverce();
+									}
+								}
+								cell[index].colorFlag = color;
+							}
+							else
+							{
+								int indexLT = GetBigIndex(index);
+
+								index += dirY * width + dirX;
+								n++;
+
+								//ひっくり返す(色を変える)
+								for (std::unique_ptr<Cell>& newcell : cellList)
+								{
+									if (newcell->getIndex() == indexLT)
+									{
+										newcell->setReverce();
+									}
+								}
+
+								BigChange(indexLT, bigColor);
+							}
+						}
+
+						//ひっくり返したら別の方向を探索するため抜ける
+						break;
+					}
+					else if (cell[index].colorFlag == bigColor)
+					{
+						if (isBigO)
+						{
+							break;
+						}
+
+						if (isBigC)
+						{
+							//石を置く
+							index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
+							BigChange(index, color);
+
+							for (std::unique_ptr<Block>& newblock : blockList)
+							{
+								if (newblock->getIndex() == nowPlayerPointBlockIndex)
+								{
+									//石を置く
+									if (cell[index].colorFlag == BIG_W)
+									{
+										nowPlayingCell->init(
+											{
+												newblock->getBlockPosition().x,
+												cellPosY,
+												newblock->getBlockPosition().z
+											},
+											bigScale,
+											cellType::white, true);
+										nowPlayingCell->setIndex(index);
+										cellList.push_back(std::move(nowPlayingCell));
+
+										nowPlayingCell = std::make_unique<Cell>();
+										nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::black, false);
+									}
+									else if (cell[index].colorFlag == BIG_B)
+									{
+										nowPlayingCell->init(
+											{
+												newblock->getBlockPosition().x,
+												cellPosY,
+												newblock->getBlockPosition().z
+											},
+											bigScale,
+											cellType::black, true);
+										nowPlayingCell->setIndex(index);
+										cellList.push_back(std::move(nowPlayingCell));
+
+										nowPlayingCell = std::make_unique<Cell>();
+										nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::white, false);
+									}
+								}
+							}
+
+							//間のマスをひっくり返す
+							for (int n = 1; n < s; n++)
+							{
+								//ひっくり返すマスのインデックスをセット
+								index += dirY * width + dirX;
+								count++;
+
+								if (cell[index].GetBigCell() == NONE)
+								{
+									//ひっくり返す(色を変える)
+									for (std::unique_ptr<Cell>& newcell : cellList)
+									{
+										if (newcell->getIndex() == index)
+										{
+											newcell->setReverce();
+										}
+									}
+									cell[index].colorFlag = color;
+								}
+								else
+								{
+									int indexLT = GetBigIndex(index);
+
+									index += dirY * width + dirX;
+									n++;
+
+									//ひっくり返す(色を変える)
+									for (std::unique_ptr<Cell>& newcell : cellList)
+									{
+										if (newcell->getIndex() == indexLT)
+										{
+											newcell->setReverce();
+										}
+									}
+
+									BigChange(indexLT, bigColor);
+								}
+							}
+
+							//ひっくり返したら別の方向を探索するため抜ける
+							break;
+						}
+
+						isBigC != isBigC;
+					}
+					else if (cell[index].colorFlag == other)
+					{
+						if (isBigO)
+						{
+							break;
+						}
+					}
+					else if (cell[index].colorFlag == bigOther)
+					{
+						isBigO = !isBigO;
+					}
+				}
+			}
+		}
+
+		if (count > 0)
+		{
+			count += 4;
 		}
 	}
 
@@ -313,33 +833,49 @@ bool Othello::IsSkip(ColorFlag color)
 	//結果
 	bool result = true;
 
+	ColorFlag skipColor[] = {
+		ColorFlag::EMPTY,
+		ColorFlag::HOLE,
+		ColorFlag::BIG_E
+	};
+
+	ColorFlag bigColor = ColorFlag::EMPTY; //自分の色(デカマス)
+	ColorFlag other = ColorFlag::EMPTY; //相手の色
+	ColorFlag bigOther = ColorFlag::EMPTY; //相手の色(デカマス)
+	// colorがデカマスだったらノーマルに設定し直す
+	if (color == ColorFlag::BIG_B)
+	{
+		color = ColorFlag::BLACK;
+	}
+	else if (color == ColorFlag::BIG_W)
+	{
+		color = ColorFlag::WHITE;
+	}
+	// それぞれに対応した物を設定する
+	if (color == ColorFlag::BLACK)
+	{
+		bigColor = ColorFlag::BIG_B;
+		other = ColorFlag::WHITE;
+		bigOther = ColorFlag::BIG_W;
+	}
+	else if (color == ColorFlag::WHITE)
+	{
+		bigColor = ColorFlag::BIG_W;
+		other = ColorFlag::BLACK;
+		bigOther = ColorFlag::BIG_B;
+	}
+
+	bool isBigC = false; //デカマスを通るかどうか(自分の色)
+	bool isBigO = false; //デカマスを通るかどうか(相手の色)
+
 	//とりあえず全マスを中心とした3*3を全て判定
 	// i は一次元配列のインデックス
 	for (int i = 0; i < width * height; i++)
 	{
-		//置けるなら抜ける
-		if (result == false)
-		{
-			break;
-		}
-
 		//ブロックに何か置いてあったらとばす
-		if (cell[i].colorFlag != ColorFlag::EMPTY)
+		if (cell[i].colorFlag != ColorFlag::EMPTY && cell[i].colorFlag != ColorFlag::BIG_E)
 		{
 			continue;
-		}
-
-		//置く色に対して相手のタイプ
-		ColorFlag other = ColorFlag::EMPTY;
-
-		//引数が白か黒だったら反転したものをセット
-		if (color == ColorFlag::BLACK)
-		{
-			other = ColorFlag::WHITE;
-		}
-		else if (color == ColorFlag::WHITE)
-		{
-			other = ColorFlag::BLACK;
 		}
 
 		//現在の一次元配列インデックス
@@ -351,53 +887,73 @@ bool Othello::IsSkip(ColorFlag color)
 		//縦座標：インデックスをマップの横幅で割り小数点以下切り捨て
 		int y = index / width;
 
-		//置くマスを中心とした３行
-		for (int dirY = -1; dirY <= 1; dirY++)
+		if (cell[i].colorFlag == ColorFlag::EMPTY)
 		{
-			//置くマスを中心とした３列
-			for (int dirX = -1; dirX <= 1; dirX++)
+			//置くマスを中心とした３行
+			for (int dirY = -1; dirY <= 1; dirY++)
 			{
-				//中心(置くマス)だったらとばす
-				if (dirY == 0 && dirX == 0)
+				//置くマスを中心とした３列
+				for (int dirX = -1; dirX <= 1; dirX++)
 				{
-					continue;
-				}
-
-				//場外だったらとばす
-				if (x + dirX < 0 || y + dirY < 0 || x + dirX >= width || y + dirY >= height)
-				{
-					continue;
-				}
-
-				//3*3マスの中の1マスのインデックスをセット
-				index = (y + dirY) * width + (x + dirX);
-
-				//1マス周囲が同じ色か空だったらとばす
-				if (cell[index].colorFlag != other)
-				{
-					continue;
-				}
-
-				//マップの最大幅
-				const int size = (width > height) ? width : height;
-
-				//2マス先以降を判定
-				for (int s = 2; s < size; s++)
-				{
-					//場外だったらとばす
-					if (x + (dirX * s) < 0 || y + (dirY * s) < 0 || x + (dirX * s) >= width || y + (dirY * s) >= height)
+					//中心(置くマス)だったらとばす
+					if (dirY == 0 && dirX == 0)
 					{
-						break;
+						continue;
 					}
 
-					//2マス先以降のインデックスをセット
-					index += dirY * width + dirX;
-
-					//インデックスがマップの配列サイズ内だったら
-					if (index >= 0 && index < cell.size())
+					//場外だったらとばす
+					if (x + dirX < 0 || y + dirY < 0 || x + dirX >= width || y + dirY >= height)
 					{
+						continue;
+					}
+
+					//3*3マスの中の1マスのインデックスをセット
+					index = (y + dirY) * width + (x + dirX);
+					isBigC = false;
+					isBigO = false;
+
+					if (cell[index].colorFlag == bigOther)
+					{
+						isBigO = true;
+					}
+					//1マス周囲が同じ色か空だったらとばす
+					else if (cell[index].colorFlag != other)
+					{
+						continue;
+					}
+
+					//マップの最大幅
+					const int size = (width > height) ? width : height;
+
+					//2マス先以降を判定
+					for (int s = 2; s < size; s++)
+					{
+						//場外だったらとばす
+						if (x + (dirX * s) < 0 || y + (dirY * s) < 0 || x + (dirX * s) >= width || y + (dirY * s) >= height)
+						{
+							break;
+						}
+
+						//2マス先以降のインデックスをセット
+						index += dirY * width + dirX;
+
+						//インデックスが範囲外だったらとばす
+						if (index < 0 || index >= cell.size())
+						{
+							break;
+						}
+
 						//2マス先以降に石がないなら抜ける
-						if (cell[index].colorFlag != ColorFlag::BLACK && cell[index].colorFlag != ColorFlag::WHITE)
+						bool flag = false;
+						for (auto dirX : skipColor)
+						{
+							if (cell[index].colorFlag == dirX)
+							{
+								flag = true;
+								break;
+							}
+						}
+						if (flag)
 						{
 							break;
 						}
@@ -405,12 +961,226 @@ bool Othello::IsSkip(ColorFlag color)
 						//隣が違う色で、2マス先以降に同じ色があった場合置けるので抜ける
 						if (cell[index].colorFlag == color)
 						{
+							if (isBigC || isBigO)
+							{
+								break;
+							}
+
 							result = false;
 							break;
 						}
+						else if (cell[index].colorFlag == bigColor)
+						{
+							if (isBigO)
+							{
+								break;
+							}
+
+							if (isBigC)
+							{
+								result = false;
+								break;
+							}
+
+							isBigC = !isBigC;
+						}
+						else if (cell[index].colorFlag == other)
+						{
+							if (isBigO)
+							{
+								break;
+							}
+						}
+						else if (cell[index].colorFlag == bigOther)
+						{
+							isBigO = !isBigO;
+						}
+					}
+
+					//置けるなら抜ける
+					if (result == false)
+					{
+						break;
 					}
 				}
+
+				//置けるなら抜ける
+				if (result == false)
+				{
+					break;
+				}
 			}
+		}
+		else if (cell[i].colorFlag == ColorFlag::BIG_E)
+		{
+			if (cell[i].GetBigCell() != BigCell::LT)
+			{
+				continue;
+			}
+
+			for (int dirX = 0; dirX < 4; dirX++)
+			{
+				index = i;
+				if (dirX % 2 == 1)
+				{
+					index += 1;
+				}
+				if (dirX / 2 == 1)
+				{
+					index += width;
+				}
+				x = index % width;
+				y = index / width;
+
+				for (int dir = 0; dir < 3; dir++)
+				{
+					int dirX = 0, dirY = 0;
+
+					switch (dirX)
+					{
+					case BigCell::LT:
+						if (dir % 2 == 0)
+						{
+							dirX = -1;
+						}
+						if (dir / 2 == 0)
+						{
+							dirY = -1;
+						}
+						break;
+					case BigCell::RT:
+						if (dir % 2 == 1)
+						{
+							dirX = +1;
+						}
+						if (dir / 2 == 0)
+						{
+							dirY = -1;
+						}
+						break;
+					case BigCell::LB:
+						if (dir % 2 == 0)
+						{
+							dirX = -1;
+						}
+						if (dir / 2 == 1)
+						{
+							dirY = +1;
+						}
+						break;
+					case BigCell::RB:
+						if (dir % 2 == 1)
+						{
+							dirX = +1;
+						}
+						if (dir / 2 == 1)
+						{
+							dirY = +1;
+						}
+						break;
+					default:
+						break;
+					}
+
+					if (x + dirX < 0 || y + dirY < 0 || x + dirX >= width || y + dirY >= height)
+					{
+						continue;
+					}
+
+					index = (y + dirY) * width + (x + dirX);
+					isBigC = false;
+					isBigO = false;
+
+					if (cell[index].colorFlag == bigOther)
+					{
+						isBigO = true;
+					}
+					else if (cell[index].colorFlag != other)
+					{
+						continue;
+					}
+
+					const int size = (width > height) ? width : height;
+					for (int s = 2; s < size; s++)
+					{
+						if (x + (dirX * s) < 0 || y + (dirY * s) < 0 || x + (dirX * s) >= width || y + (dirY * s) >= height)
+						{
+							break;
+						}
+
+						index += dirY * width + dirX;
+						if (index >= 0 && index < cell.size())
+						{
+							bool flag = false;
+							for (auto k : skipColor)
+							{
+								if (cell[index].colorFlag == k)
+								{
+									flag = true;
+									break;
+								}
+							}
+							if (flag)
+							{
+								break;
+							}
+
+							if (cell[index].colorFlag == color)
+							{
+								if (isBigO || isBigC)
+								{
+									break;
+								}
+
+								result = false;
+								break;
+							}
+							else if (cell[index].colorFlag == bigColor)
+							{
+								if (isBigO)
+								{
+									break;
+								}
+
+								if (isBigC)
+								{
+									result = false;
+									break;
+								}
+
+								isBigC = !isBigC;
+							}
+							else if (cell[index].colorFlag == other)
+							{
+								if (isBigO)
+								{
+									break;
+								}
+							}
+							else if (cell[index].colorFlag == bigOther)
+							{
+								isBigO = !isBigO;
+							}
+						}
+					}
+
+					if (result == false)
+					{
+						break;
+					}
+				}
+
+				if (result == false)
+				{
+					break;
+				}
+			}
+		}
+
+		//置けるなら抜ける
+		if (result == false)
+		{
+			break;
 		}
 	}
 
@@ -461,6 +1231,40 @@ void Othello::playerInput()
 			}
 		}
 	}
+}
+
+int Othello::BigChange(int index, ColorFlag color)
+{
+	if (index < 0 || index >= cell.size() ||
+		cell[index].colorFlag <= ColorFlag::HOLE ||
+		cell[index].GetBigCell() == BigCell::NONE ||
+		color == ColorFlag::HOLE)
+	{
+		return -1;
+	}
+
+	int bigIndex[4] = {};
+	index = GetBigIndex(index);
+	bigIndex[0] = index;
+	bigIndex[1] = index + 1;
+	bigIndex[2] = index + width;
+	bigIndex[3] = index + width + 1;
+
+	if (color == ColorFlag::BLACK)
+	{
+		color = ColorFlag::BIG_B;
+	}
+	if (color == ColorFlag::WHITE)
+	{
+		color = ColorFlag::BIG_W;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		cell[bigIndex[i]].colorFlag = color;
+	}
+
+	return bigIndex[0];
 }
 
 int Othello::Load(const std::string& filePath)
@@ -526,12 +1330,12 @@ int Othello::Load(const std::string& filePath)
 
 			for (auto& itr : bigCells)
 			{
-				for (int j = 0; j < 4; j++)
+				for (int dirX = 0; dirX < 4; dirX++)
 				{
-					if (itr[j] == i)
+					if (itr[dirX] == i)
 					{
 						isHit = true;
-						bigCellState = static_cast<BigCell>(j);
+						bigCellState = static_cast<BigCell>(dirX);
 						break;
 					}
 				}
@@ -661,4 +1465,24 @@ ColorFlag Othello::GetStartColor() const
 	{
 		return ColorFlag::BLACK;
 	}
+}
+
+int Othello::GetBigIndex(int index) const
+{
+	if (index < 0 || index >= cell.size() ||
+		cell[index].GetBigCell() == BigCell::NONE)
+	{
+		return -1;
+	}
+
+	if (cell[index].GetBigCell() % 2 == 1)
+	{
+		index -= 1;
+	}
+	if (cell[index].GetBigCell() / 2 == 1)
+	{
+		index -= width;
+	}
+
+	return index;
 }

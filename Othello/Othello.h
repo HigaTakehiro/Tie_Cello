@@ -101,6 +101,8 @@ public: //メンバ関数
 	//プレイヤー入力
 	void playerInput();
 
+	// デカマスの置き換え
+	int BigChange(int index, ColorFlag color);
 	// ステージ読み込み
 	int Load(const std::string& filePath);
 
@@ -137,4 +139,6 @@ public: //メンバ関数
 	bool GetTieFlag() const { return isTie; }
 	bool GetFinishFlag() const { return isFinish; }
 
+	// デカマスの左上座標
+	int GetBigIndex(int index) const;
 };
