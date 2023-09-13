@@ -39,6 +39,14 @@ void resultScene::loadResources()
 	selectText->baceSize = { 326,137 };
 	selectText->choosingSize = { 358.6,150.7 };
 	selectText->position = { 840,470,0 };
+
+	restartText = std::make_unique<SingleSprite>();
+	restartText->generateSprite("Restart.png");
+	restartText->anchorpoint = { 0.5f,0.5f };
+	restartText->size = { 480,127 };
+	restartText->baceSize = { 326,127 };
+	restartText->choosingSize = { 528,139.7 };
+	restartText->position = { 340,470,0 };
 }
 
 void resultScene::initialize()
@@ -55,6 +63,7 @@ void resultScene::initialize()
 
 void resultScene::setParameter()
 {
+	isPlay = false;
 	isNextScene = false;
 }
 
@@ -74,6 +83,8 @@ void resultScene::updata()
 	{
 		overScene();
 	}
+
+	selectText->spriteUpdata();
 }
 
 void resultScene::drawBack()
@@ -98,7 +109,8 @@ void resultScene::draw2D()
 	}
 	else
 	{
-
+		restartText->drawSprite(directx->cmdList.Get());
+		selectText->drawSprite(directx->cmdList.Get());
 	}
 }
 
@@ -107,7 +119,6 @@ void resultScene::clearScene()
 	//
 	clearText->spriteUpdata();
 	titleText->spriteUpdata();
-	selectText->spriteUpdata();
 
 	//次のシーンへの移行条件
 	if (titleText->isSpriteMouseInput())
@@ -124,5 +135,17 @@ void resultScene::clearScene()
 
 void resultScene::overScene()
 {
+	restartText->spriteUpdata();
+
 	//次のシーンへの移行条件
+	if (restartText->isSpriteMouseInput())
+	{
+		isPlay = true;
+		isNextScene = true;
+	}
+	else if (selectText->isSpriteMouseInput())
+	{
+		isSelectOrTitle = true;
+		isNextScene = true;
+	}
 }

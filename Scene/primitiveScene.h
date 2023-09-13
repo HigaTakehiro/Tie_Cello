@@ -94,6 +94,7 @@ public:
 	static bool isTitle;
 	static bool isSelect;
 	static bool isResult;
+	static bool isPlay;
 
 	//オセロとスコア背景
 	static std::unique_ptr<Othello> othello;

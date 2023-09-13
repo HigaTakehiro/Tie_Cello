@@ -3,7 +3,7 @@
 #include<random>
 PostEffect* EvenlyStaging::post = nullptr;
 directX* EvenlyStaging::dx = nullptr;
-float EvenlyStaging::clearRatio = 0;
+float EvenlyStaging::clearRatio = 0.5f;
 float EvenlyStaging::nowRatio = 0;
 int EvenlyStaging::whiteCount = 0;
 int EvenlyStaging::blackCount = 0;
