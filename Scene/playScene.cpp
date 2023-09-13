@@ -34,6 +34,10 @@ void playScene::setParameter()
 	othello->Init();
 	std::string num = std::to_string(Othello::GetLoadStageNumber());
 	othello->Load(("Resources/StageData/stage" + num + ".csv"));
+
+	isTitle = false;
+	isSelect = false;
+	isResult = false;
 	isNextScene = false;
 }
 
@@ -44,7 +48,7 @@ void playScene::updata()
 
 	EvenlyStaging::setWhiteBlackCount(othello->GetWhiteCount(), othello->GetBlackCount());
 
-	EvenlyStaging::ratioSet(0.3f);
+	EvenlyStaging::ratioSet(0.5f);
 
 	if (othello->GetNowColor() == ColorFlag::WHITE)
 	{
@@ -72,6 +76,7 @@ void playScene::updata()
 
 		//次のシーンへの演出準備ゾーン
 
+		isResult = true;
 		isNextScene = true;
 	}
 }
@@ -95,4 +100,12 @@ void playScene::draw2D()
 void playScene::tutorial()
 {
 
+}
+
+void playScene::pauseMenu()
+{
+	if (!isPause)
+	{
+		return;
+	}
 }

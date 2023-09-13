@@ -18,7 +18,27 @@ resultScene::~resultScene()
 
 void resultScene::loadResources()
 {
-	
+	clearText = std::make_unique<SingleSprite>();
+	clearText->generateSprite("Clear.png");
+	clearText->anchorpoint = { 0.5f,0.5f };
+	clearText->size = { 498,196.5f };
+	clearText->position = { 640,270,0 };
+
+	titleText = std::make_unique<SingleSprite>();
+	titleText->generateSprite("Title.png");
+	titleText->anchorpoint = { 0.5f,0.5f };
+	titleText->size = { 219,130 };
+	titleText->baceSize = { 219,130 };
+	titleText->choosingSize = { 240.9,143 };
+	titleText->position = { 440,470,0 };
+
+	selectText = std::make_unique<SingleSprite>();
+	selectText->generateSprite("Select.png");
+	selectText->anchorpoint = { 0.5f,0.5f };
+	selectText->size = { 326,137 };
+	selectText->baceSize = { 326,137 };
+	selectText->choosingSize = { 358.6,150.7 };
+	selectText->position = { 840,470,0 };
 }
 
 void resultScene::initialize()
@@ -54,12 +74,6 @@ void resultScene::updata()
 	{
 		overScene();
 	}
-
-	//次のシーンへの移行条件
-	if (input->Triger(DIK_SPACE))
-	{
-		isNextScene = true;
-	}
 }
 
 void resultScene::drawBack()
@@ -76,16 +90,34 @@ void resultScene::draw3D()
 
 void resultScene::draw2D()
 {
-	
+	if (isClearOrOver)
+	{
+		clearText->drawSprite(directx->cmdList.Get());
+		titleText->drawSprite(directx->cmdList.Get());
+		selectText->drawSprite(directx->cmdList.Get());
+	}
+	else
+	{
+
+	}
 }
 
 void resultScene::clearScene()
 {
-
+	//
+	clearText->spriteUpdata();
+	titleText->spriteUpdata();
+	selectText->spriteUpdata();
 
 	//次のシーンへの移行条件
-	if (input->Triger(DIK_SPACE))
+	if (titleText->isSpriteMouseInput())
 	{
+		isSelectOrTitle = false;
+		isNextScene = true;
+	}
+	else if (selectText->isSpriteMouseInput())
+	{
+		isSelectOrTitle = true;
 		isNextScene = true;
 	}
 }
@@ -93,8 +125,4 @@ void resultScene::clearScene()
 void resultScene::overScene()
 {
 	//次のシーンへの移行条件
-	if (input->Triger(DIK_SPACE))
-	{
-		isNextScene = true;
-	}
 }

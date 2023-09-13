@@ -33,6 +33,9 @@ public:
 
 	static void setWhiteBlackCount(int wcount, int bcount)
 	{
+		oldWhiteCount = whiteCount;
+		oldBlackCount = blackCount;
+
 		whiteCount = wcount;
 		blackCount = bcount;
 	}
@@ -41,6 +44,7 @@ public:
 
 	void setIsWhite(bool iswhite)
 	{
+		oldIsWhite = isWhite;
 		isWhite = iswhite;
 	}
 
@@ -50,7 +54,19 @@ public:
 
 	void draw2D();
 
-	bool getIsClear() { return isClear; }
+	bool getIsClear()
+	{
+		if (nowRatio == clearRatio)
+		{
+			isClear = true;
+		}
+		else
+		{
+			isClear = false;
+		}
+
+		return isClear;
+	}
 
 private:
 
@@ -58,20 +74,34 @@ private:
 
 	void setParticle();
 
+	void countWhiteBlack();
+
 	//静的メンバ変数
 	static PostEffect* post;	//深度バッファクリア用
 	static directX* dx;			//描画処理用
 	static float nowRatio;		//現在の白黒の割合
 	static float clearRatio;	//クリア条件の白黒の割合
+
+	//現在フレームのカウント
 	static int whiteCount;		//白の数
 	static int blackCount;		//黒の数
 
+	static int oldWhiteCount;		//白の数
+	static int oldBlackCount;		//黒の数
+
 	bool isClear = false;
 	bool isWhite = false;		//白の手番かどうか
+	bool oldIsWhite = false;
 	SingleSprite clearLine;
 	SingleSprite nowLine;
 	SingleSprite whiteBack;
 	SingleSprite blackBack;
 
+	std::list<std::unique_ptr<SingleSprite>> whiteCountNum;
+	std::list<std::unique_ptr<SingleSprite>> blackCountNum;
+
 	std::list<std::unique_ptr<SingleParticle>> particleList;
+
+	int FontWid = 9;
+	int FontHei = 18;
 };

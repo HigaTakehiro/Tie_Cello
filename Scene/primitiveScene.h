@@ -91,6 +91,10 @@ public:
 	//タイトルかセレクトか(true:セレクト/false:タイトル)
 	static bool isSelectOrTitle;
 
+	static bool isTitle;
+	static bool isSelect;
+	static bool isResult;
+
 	//オセロとスコア背景
 	static std::unique_ptr<Othello> othello;
 	static std::unique_ptr<EvenlyStaging> evenry;

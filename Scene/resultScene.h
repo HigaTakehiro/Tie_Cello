@@ -44,4 +44,8 @@ private:
 	bool isMoveSelectIcon = false;
 
 	bool isPushTitle = false;
+
+	std::unique_ptr<SingleSprite> clearText;
+	std::unique_ptr<SingleSprite> titleText;
+	std::unique_ptr<SingleSprite> selectText;
 };
