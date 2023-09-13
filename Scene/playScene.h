@@ -50,4 +50,10 @@ private:
 	bool isPause = false;
 	easingManager pauseScleenEase;
 
+	std::unique_ptr<SingleSprite> pauseScleen;
+	std::unique_ptr<SingleSprite> pauseText;
+	std::unique_ptr<SingleSprite> restartText;
+	std::unique_ptr<SingleSprite> selecText;
+	std::unique_ptr<SingleSprite> backText;
+	std::unique_ptr<SingleSprite> arrow;
 };
