@@ -64,7 +64,7 @@ void sceneManager::replacementScene()
 			nowscene = new playScene();
 			nowscene->setParameter();
 		}
-		if (!primitiveScene::isSelectOrTitle)
+		else if (!primitiveScene::isSelectOrTitle)
 		{
 			nowscene = new titleScene();
 			nowscene->setParameter();
