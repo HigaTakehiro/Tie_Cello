@@ -37,6 +37,8 @@ private:
 	XMFLOAT3 MOUSE_POS = { 0,0,0 };
 	//背景
 	SingleSprite titleBack;
+	SingleSprite clickMessage;
+	SingleSprite arrow;
 	std::array<SingleSprite, 9 * 2> titleChars;
 
 	//タイトルアニメーション
