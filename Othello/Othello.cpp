@@ -558,6 +558,11 @@ int Othello::Load(const std::string& filePath)
 
 	for (int i = 0; i < cell.size(); i++)
 	{
+		if (cell[i].GetBigCell() != BigCell::NONE && cell[i].GetBigCell() != BigCell::LT)
+		{
+			continue;
+		}
+
 		int x = i % width;
 		int z = i / width;
 
@@ -570,6 +575,14 @@ int Othello::Load(const std::string& filePath)
 		blockType type = blockType((x + z) % 2);
 
 		std::unique_ptr<Block> newblock = std::make_unique<Block>();
+
+		XMFLOAT3 scale =
+		{
+			drawScale.x * ((cell[i].GetBigCell() == BigCell::LT) + 1),
+			drawScale.y,
+			drawScale.z * ((cell[i].GetBigCell() == BigCell::LT) + 1)
+		};
+
 		XMFLOAT3 pos =
 		{
 			blockDrawOffsetX + ((float)x * blockDistance) * drawScale.x,
@@ -579,13 +592,18 @@ int Othello::Load(const std::string& filePath)
 		pos.x += drawOffset.x;
 		pos.y += drawOffset.y;
 		pos.z += drawOffset.z;
-		newblock->init(type, pos, drawScale, i);
+
+		newblock->init(type, pos, scale, i);
+
+		pos.x += blockDistance * (cell[i].GetBigCell() == BigCell::LT) / 2.0f;
+		pos.z -= blockDistance * (cell[i].GetBigCell() == BigCell::LT) / 2.0f;
+		newblock->blockObject->SetPosition(pos);
+		newblock->startPos = newblock->blockObject->getPosition();
 
 		blockList.push_back(std::move(newblock));
 
 		//石を置く
-		if (cell[i].colorFlag == WHITE ||
-			(cell[i].colorFlag == ColorFlag::BIG_W && cell[i].GetBigCell() == BigCell::LT))
+		if (cell[i].colorFlag == WHITE || cell[i].colorFlag == ColorFlag::BIG_W)
 		{
 			//新しい石
 			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
@@ -595,13 +613,12 @@ int Othello::Load(const std::string& filePath)
 					cellPosY,
 					blockList.back()->getBlockPosition().z
 				},
-				drawScale,
+				scale,
 				cellType::white, true);
 			newcell->setIndex(i);
 			cellList.push_back(std::move(newcell));
 		}
-		else if (cell[i].colorFlag == BLACK ||
-				 (cell[i].colorFlag == ColorFlag::BIG_B && cell[i].GetBigCell() == BigCell::LT))
+		else if (cell[i].colorFlag == BLACK || cell[i].colorFlag == ColorFlag::BIG_B)
 		{
 			//新しい石
 			std::unique_ptr<Cell> newcell = std::make_unique<Cell>();
@@ -611,7 +628,7 @@ int Othello::Load(const std::string& filePath)
 					cellPosY,
 					blockList.back()->getBlockPosition().z
 				},
-				drawScale,
+				scale,
 				cellType::black, true);
 			newcell->setIndex(i);
 			cellList.push_back(std::move(newcell));
