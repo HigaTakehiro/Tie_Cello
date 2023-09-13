@@ -109,7 +109,7 @@ void selectScene::updata()
 	// ステージ読み込み
 	if (input->Triger(DIK_SPACE))
 	{
-		isNextScene = true;
+		isLoadStage = loadStage();
 	}
 #endif // _DEBUG
 

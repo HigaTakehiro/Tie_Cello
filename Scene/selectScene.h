@@ -50,7 +50,7 @@ private:
 	SingleSprite arrowR;
 
 	// ステージの数
-	const int stageCount = 9;
+	const int stageCount = 10;
 	// 選択中のステージ
 	int nowStageNumber = 1;
 	

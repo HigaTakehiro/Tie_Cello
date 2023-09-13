@@ -443,7 +443,7 @@ int Othello::Put(ColorFlag color)
 							break;
 						}
 
-						isBigC != isBigC;
+						isBigC = !isBigC;
 					}
 					else if (cell[index].colorFlag == other)
 					{
@@ -483,6 +483,8 @@ int Othello::Put(ColorFlag color)
 			{
 				index += width;
 			}
+			int bigCellX = index % width;
+			int bigCellY = index / width;
 
 			for (int dir = 0; dir < 3; dir++)
 			{
@@ -534,13 +536,13 @@ int Othello::Put(ColorFlag color)
 					break;
 				}
 
-				if (nowPlayerPointBlockX + dirX < 0 || nowPlayerPointBlockZ + dirY < 0 ||
-					nowPlayerPointBlockX + dirX >= width || nowPlayerPointBlockZ + dirY >= height)
+				if (bigCellX + dirX < 0 || bigCellY + dirY < 0 ||
+					bigCellX + dirX >= width || bigCellY + dirY >= height)
 				{
 					continue;
 				}
 
-				index = (nowPlayerPointBlockZ + dirY) * width + (nowPlayerPointBlockX + dirX);
+				index = (bigCellY + dirY) * width + (bigCellX + dirX);
 				isBigC = false;
 				isBigO = false;
 
@@ -558,8 +560,8 @@ int Othello::Put(ColorFlag color)
 				for (int s = 2; s < size; s++)
 				{
 					//場外だったらとばす
-					if (nowPlayerPointBlockX + (dirX * s) < 0 || nowPlayerPointBlockZ + (dirY * s) < 0 ||
-						nowPlayerPointBlockX + (dirX * s) >= width || nowPlayerPointBlockZ + (dirY * s) >= height)
+					if (bigCellX + (dirX * s) < 0 || bigCellY + (dirY * s) < 0 ||
+						bigCellX + (dirX * s) >= width || bigCellY + (dirY * s) >= height)
 					{
 						break;
 					}
@@ -603,7 +605,7 @@ int Othello::Put(ColorFlag color)
 						}
 
 						//石を置く
-						index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
+						index = bigCellY * width + bigCellX;
 						BigChange(index, color);
 
 						for (std::unique_ptr<Block>& newblock : blockList)
@@ -698,7 +700,7 @@ int Othello::Put(ColorFlag color)
 						if (isBigC)
 						{
 							//石を置く
-							index = nowPlayerPointBlockZ * width + nowPlayerPointBlockX;
+							index = bigCellY * width + bigCellX;
 							BigChange(index, color);
 
 							for (std::unique_ptr<Block>& newblock : blockList)
@@ -784,7 +786,7 @@ int Othello::Put(ColorFlag color)
 							break;
 						}
 
-						isBigC != isBigC;
+						isBigC = !isBigC;
 					}
 					else if (cell[index].colorFlag == other)
 					{

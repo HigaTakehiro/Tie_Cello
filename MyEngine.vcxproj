@@ -138,6 +138,7 @@
     <ClInclude Include="Scene\titleScene.h" />
     <ClInclude Include="staging\Easing.h" />
     <ClInclude Include="staging\EvenlyStaging.h" />
+    <ClInclude Include="staging\SceneAnimation.h" />
     <ClInclude Include="staging\Shake.h" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClCompile Include="Scene\titleScene.cpp" />
     <ClCompile Include="staging\Easing.cpp" />
     <ClCompile Include="staging\EvenlyStaging.cpp" />
+    <ClCompile Include="staging\SceneAnimation.cpp" />
     <ClCompile Include="staging\Shake.cpp" />
   </ItemGroup>
   <ItemGroup>
