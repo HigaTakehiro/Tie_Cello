@@ -1314,6 +1314,7 @@ int Othello::Load(const std::string& filePath)
 
 	//開始時の色
 	startColor = num[2];
+	nowColor = GetStartColor();
 
 	int* cellArray = new int[(width * height)];
 	File::LoadMapChip(ifs, cellArray, width * height);
