@@ -6,7 +6,15 @@
 #include "../File/LoadCSV.h"
 
 dxinput* Othello::input = nullptr;
+Audio* Othello::audio = nullptr;
 int Othello::loadStageNumber = 0;
+SoundData Othello::putCellSE = SoundData();
+
+void Othello::setAudioAndLoadSE(Audio* ad)
+{
+	audio = ad;
+	putCellSE = audio->loadSoundWave("Resources/Sound's/PutStone.wav", putCellSE);
+}
 
 Othello::Othello() :
 	cell{},
@@ -285,6 +293,9 @@ int Othello::Put(ColorFlag color)
 
 									nowPlayingCell = std::make_unique<Cell>();
 									nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::black, false);
+
+									audio->stopSoundWave(putCellSE);
+									audio->playSoundWave_Val(putCellSE, false, 0.35);
 								}
 								else if (cell[index].colorFlag == BLACK)
 								{
@@ -301,6 +312,9 @@ int Othello::Put(ColorFlag color)
 
 									nowPlayingCell = std::make_unique<Cell>();
 									nowPlayingCell->init(newblock->getBlockPosition(), drawScale, cellType::white, false);
+
+									audio->stopSoundWave(putCellSE);
+									audio->playSoundWave_Val(putCellSE, false, 0.35);
 								}
 							}
 						}

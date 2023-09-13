@@ -93,9 +93,12 @@ void titleScene::setParameter()
 	Cell::setStaticData(directx);
 	Block::setStaticData(directx);
 	Othello::setInput(input);
+	Othello::setAudioAndLoadSE(audio);
 	othello = std::make_unique<Othello>();
 	othello->Init({ 0.0f, 0.0f, -15.0f }, { 1.5f, 1.0f, 1.5f });
 	othello->Load(("Resources/StageData/tutorial.csv"));
+
+	audio->playSoundWave_Val(titleBGM, true, 0.2);
 
 	//タイトルアニメーション準備
 	isPushStart = false;

@@ -98,4 +98,8 @@ public:
 	//オセロとスコア背景
 	static std::unique_ptr<Othello> othello;
 	static std::unique_ptr<EvenlyStaging> evenry;
+
+	//音
+
+	static SoundData titleBGM;
 };

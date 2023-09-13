@@ -19,6 +19,8 @@ bool primitiveScene::isResult = false;
 std::unique_ptr<Othello> primitiveScene::othello = std::make_unique<Othello>();
 std::unique_ptr<EvenlyStaging> primitiveScene::evenry = std::make_unique<EvenlyStaging>();
 
+SoundData primitiveScene::titleBGM = SoundData();
+
 primitiveScene::primitiveScene()
 {
 
@@ -72,6 +74,9 @@ void primitiveScene::setStaticData(directX* Directx, dxinput* Input, Audio* Audi
 
 	Cell::setStaticData(directx);
 	Block::setStaticData(directx);
+
+	//‰¹“Ç‚Ýž‚Ý
+	titleBGM = audio->loadSoundWave("Resources/Sound's/bgm01.wav", titleBGM);
 }
 
 void primitiveScene::finalize()
