@@ -61,6 +61,8 @@ void playScene::updata()
 	//次のシーンへの移行条件
 	if (othello->GetFinishFlag())
 	{
+		EvenlyStaging::ratioSet(0.5f);
+
 		if (evenry->getIsClear())
 		{
 			isClearOrOver = true;

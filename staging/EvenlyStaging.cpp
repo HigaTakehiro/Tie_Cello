@@ -67,11 +67,6 @@ void EvenlyStaging::updata()
 	{
 		newp->updata();
 	}
-
-	if (nowRatio == clearRatio)
-	{
-		isClear = true;
-	}
 }
 
 void EvenlyStaging::changeBackSprite()

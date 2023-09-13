@@ -54,7 +54,19 @@ public:
 
 	void draw2D();
 
-	bool getIsClear() { return isClear; }
+	bool getIsClear()
+	{
+		if (nowRatio == clearRatio)
+		{
+			isClear = true;
+		}
+		else
+		{
+			isClear = false;
+		}
+
+		return isClear;
+	}
 
 private:
 
@@ -73,7 +85,7 @@ private:
 	//現在フレームのカウント
 	static int whiteCount;		//白の数
 	static int blackCount;		//黒の数
-	
+
 	static int oldWhiteCount;		//白の数
 	static int oldBlackCount;		//黒の数
 
