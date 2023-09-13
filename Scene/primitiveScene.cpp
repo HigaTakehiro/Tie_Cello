@@ -15,6 +15,7 @@ bool primitiveScene::isSelectOrTitle = false;
 bool primitiveScene::isTitle = false;
 bool primitiveScene::isSelect = false;
 bool primitiveScene::isResult = false;
+bool primitiveScene::isPlay = false;
 
 std::unique_ptr<Othello> primitiveScene::othello = std::make_unique<Othello>();
 std::unique_ptr<EvenlyStaging> primitiveScene::evenry = std::make_unique<EvenlyStaging>();

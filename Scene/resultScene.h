@@ -48,4 +48,6 @@ private:
 	std::unique_ptr<SingleSprite> clearText;
 	std::unique_ptr<SingleSprite> titleText;
 	std::unique_ptr<SingleSprite> selectText;
+
+	std::unique_ptr<SingleSprite> restartText;
 };

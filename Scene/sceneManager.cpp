@@ -59,12 +59,17 @@ void sceneManager::replacementScene()
 		break;
 	case gameSceneType::result:
 		delete(nowscene);
+		if (primitiveScene::isPlay)
+		{
+			nowscene = new playScene();
+			nowscene->setParameter();
+		}
 		if (!primitiveScene::isSelectOrTitle)
 		{
 			nowscene = new titleScene();
 			nowscene->setParameter();
 		}
-		else
+		else if (primitiveScene::isSelectOrTitle)
 		{
 			nowscene = new selectScene();
 			nowscene->setParameter();
