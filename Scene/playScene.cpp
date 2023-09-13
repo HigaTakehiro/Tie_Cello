@@ -144,4 +144,17 @@ void playScene::pauseMenu()
 	{
 		return;
 	}
+
+	if (restartText->isSpriteMouseInput())
+	{
+
+	}
+	else if (selecText->isSpriteMouseInput())
+	{
+
+	}
+	else if (backText->isSpriteMouseInput())
+	{
+
+	}
 }

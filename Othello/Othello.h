@@ -6,6 +6,7 @@
 #include"Cell.h"
 #include"Block.h"
 #include"../Input/dxInput.h"
+#include"../Audio/Audio.h"
 
 class Othello
 {
@@ -14,13 +15,18 @@ public: //定数
 
 private: //静的メンバ変数
 	static dxinput* input;
+	static Audio* audio;
 	static int loadStageNumber;
+
+	//石を置いた音
+	static SoundData putCellSE;
 
 public: //静的メンバ関数
 	static void setInput(dxinput* in) { input = in; }
 	static void SetLoadStageNumber(int num) { loadStageNumber = num; }
 
 	static int GetLoadStageNumber() { return loadStageNumber; }
+	static void setAudioAndLoadSE(Audio* ad);
 
 private: //メンバ変数
 
