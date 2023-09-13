@@ -56,4 +56,6 @@ private:
 	std::unique_ptr<SingleSprite> selecText;
 	std::unique_ptr<SingleSprite> backText;
 	std::unique_ptr<SingleSprite> arrow;
+
+	std::string loadStageFileName;
 };
